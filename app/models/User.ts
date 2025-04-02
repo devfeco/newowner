@@ -2,13 +2,13 @@ import { Schema, model, models, Document } from 'mongoose'
 import bcrypt from 'bcryptjs'
 import { IUser } from '../lib/types'
 
-interface UserDocument extends Document, IUser {
+interface UserDocument extends Omit<IUser, '_id'>, Document {
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
 const userSchema = new Schema<UserDocument>(
   {
-    name: {
+    fullName: {
       type: String,
       required: [true, 'İsim alanı gereklidir'],
       trim: true,

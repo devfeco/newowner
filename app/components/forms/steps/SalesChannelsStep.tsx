@@ -31,11 +31,7 @@ export default function SalesChannelsStep({ values, onChange }: SalesChannelsSte
     { id: 'trendyol', label: 'Trendyol' },
     { id: 'hepsiburada', label: 'Hepsiburada' },
     { id: 'amazon', label: 'Amazon' },
-    { id: 'n11', label: 'n11' },
-    { id: 'gittigidiyor', label: 'GittiGidiyor' },
-    { id: 'ciceksepeti', label: 'ÇiçekSepeti' },
-    { id: 'pttavm', label: 'PTT AVM' },
-    { id: 'other', label: 'Diğer' },
+    { id: 'n11', label: 'n11' }
   ]
 
   return (

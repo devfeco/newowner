@@ -412,10 +412,12 @@ export default function CreateListingForm() {
     setIsSubmitting(true)
     
     try {
+      const token = localStorage.getItem('token')
       const response = await fetch('/api/listings/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(formValues),
       })
