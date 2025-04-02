@@ -1,36 +1,166 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NextJS Kullanıcı Yetkilendirme Sistemi
 
-## Getting Started
+Bu proje, Next.js ile oluşturulmuş tam kapsamlı bir JWT tabanlı kullanıcı yetkilendirme sistemini içerir.
 
-First, run the development server:
+## Özellikler
+
+- JWT tabanlı kimlik doğrulama
+- Kullanıcı kaydı ve girişi
+- Oturum yönetimi
+- Güvenli şifre depolama (bcrypt ile hash'leme)
+- Form doğrulama
+- TypeScript ile tip güvenliği
+- MongoDB veritabanı entegrasyonu
+- Responsive tasarım
+
+## Kurulum
+
+1. Repoyu klonlayın:
+
+```bash
+git clone https://github.com/sizin-kullanici-adiniz/next-auth-app.git
+cd next-auth-app
+```
+
+2. Bağımlılıkları yükleyin:
+
+```bash
+npm install
+# veya
+yarn install
+```
+
+3. `.env.local` dosyasını oluşturun:
+
+```bash
+cp .env.example .env.local
+```
+
+4. `.env.local` dosyasını düzenleyin ve gerekli ortam değişkenlerini ayarlayın:
+
+```
+MONGODB_URI=mongodb://localhost:27017/newowner
+JWT_SECRET=sizin_gizli_anahtariniz
+NEXT_PUBLIC_API_URL=http://localhost:3000/api
+NODE_ENV=development
+```
+
+5. Geliştirme sunucusunu başlatın:
 
 ```bash
 npm run dev
-# or
+# veya
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+6. Tarayıcınızda [http://localhost:3000](http://localhost:3000) adresine gidin.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## API Rotaları
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### `POST /api/auth/register`
 
-## Learn More
+Yeni bir kullanıcı kaydeder.
 
-To learn more about Next.js, take a look at the following resources:
+**İstek Gövdesi:**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```json
+{
+  "name": "Kullanıcı Adı",
+  "email": "kullanici@ornek.com",
+  "password": "sifre123"
+}
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Başarılı Yanıt:**
 
-## Deploy on Vercel
+```json
+{
+  "success": true,
+  "message": "Kayıt başarılı",
+  "user": {
+    "_id": "user_id",
+    "name": "Kullanıcı Adı",
+    "email": "kullanici@ornek.com"
+  },
+  "token": "jwt_token"
+}
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### `POST /api/auth/login`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Mevcut bir kullanıcıyı giriş yapar.
+
+**İstek Gövdesi:**
+
+```json
+{
+  "email": "kullanici@ornek.com",
+  "password": "sifre123"
+}
+```
+
+**Başarılı Yanıt:**
+
+```json
+{
+  "success": true,
+  "message": "Giriş başarılı",
+  "user": {
+    "_id": "user_id",
+    "name": "Kullanıcı Adı",
+    "email": "kullanici@ornek.com"
+  },
+  "token": "jwt_token"
+}
+```
+
+## Proje Yapısı
+
+```
+/app
+  /api
+    /auth
+      /login
+        route.ts
+      /register
+        route.ts
+  /auth
+    /login
+      page.tsx
+    /register
+      page.tsx
+  /components
+    /ui
+      Button.tsx
+      FormContainer.tsx
+      Input.tsx
+      ...
+    TermsModal.tsx
+    ...
+  /contexts
+    AuthContext.tsx
+  /lib
+    jwt.ts
+    mongodb.ts
+    types.ts
+  /models
+    User.ts
+  layout.tsx
+  page.tsx
+  globals.css
+```
+
+## Teknolojiler
+
+- [Next.js](https://nextjs.org/)
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [MongoDB](https://www.mongodb.com/)
+- [Mongoose](https://mongoosejs.com/)
+- [JWT](https://jwt.io/)
+- [bcrypt](https://www.npmjs.com/package/bcrypt)
+- [Tailwind CSS](https://tailwindcss.com/)
+
+## Lisans
+
+Bu proje MIT lisansı altında lisanslanmıştır. Daha fazla bilgi için `LICENSE` dosyasına bakın.

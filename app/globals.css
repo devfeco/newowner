@@ -3,6 +3,32 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* Tema Renkleri */
+  --primary-main: #1E70F9;
+  --primary-light: #E8F0FE;
+  --primary-dark: #1859C9;
+  
+  --secondary-main: #29ADB2;
+  
+  --background-main: #FFFFFF;
+  --background-card: #F8F9FA;
+  --background-light: #F0F2F5;
+  
+  --text-primary: #333333;
+  --text-secondary: #6C757D;
+  --text-light: #A0AEC0;
+  
+  --border-main: #E2E8F0;
+  --border-focus: #3B82F6;
+  
+  --social-google: #DB4437;
+  --social-linkedin: #0077B5;
+  --social-twitter: #1DA1F2;
+  
+  --status-success: #2ECC71;
+  --status-error: #E74C3C;
+  --status-warning: #F39C12;
 }
 
 @theme inline {
@@ -22,5 +48,36 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Özel Sınıf Tanımlamaları */
+.btn-primary {
+  background-color: var(--primary-main);
+  color: white;
+}
+
+.btn-secondary {
+  background-color: var(--secondary-main);
+  color: white;
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.bg-light {
+  background-color: var(--background-light);
+}
+
+.border-focus {
+  border-color: var(--border-focus);
+}
+
+.auth-gradient {
+  background: linear-gradient(135deg, #3498db 0%, var(--secondary-main) 100%);
 }
