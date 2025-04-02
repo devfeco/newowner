@@ -73,8 +73,8 @@ export default function CategoryStep({ values, onChange }: CategoryStepProps) {
           </label>
           <input
             type="text"
-            name="categoryOther"
-            onChange={(e) => onChange({ categoryOther: e.target.value })}
+            name="categoryOther" 
+            onChange={(e) => onChange({ category: e.target.value })}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="Kategori bilgisi giriniz"
           />
