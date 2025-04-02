@@ -89,6 +89,7 @@ export type FormValues = {
   ecommerceInfrastructure: string
   licenseRenewalDate: string
   hasSearchEngineBan: boolean
+  searchEngineBanDetails: string
   
   // Sosyal Medya Bilgileri
   hasSocialMedia: boolean
@@ -196,6 +197,7 @@ const initialValues: FormValues = {
   ecommerceInfrastructure: '',
   licenseRenewalDate: '',
   hasSearchEngineBan: false,
+  searchEngineBanDetails: '',
   
   hasSocialMedia: false,
   socialMediaAccounts: {
