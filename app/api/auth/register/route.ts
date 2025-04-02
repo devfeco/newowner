@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     
     // Yeni kullanıcı oluştur
     const user = await User.create({
-      name,
+      fullName: name,
       email,
       password
     })
