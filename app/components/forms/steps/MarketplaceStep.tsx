@@ -39,7 +39,7 @@ export default function MarketplaceStep({ values, onChange }: MarketplaceStepPro
           <div className="grid gap-6 mb-6 md:grid-cols-3">
             <div>
               <label className="block mb-2 text-sm font-medium text-gray-900">
-                Son 6 Aylık Ciro <span className="text-red-500">*</span>
+                Son 6 Aylık Toplam Ciro <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -83,6 +83,110 @@ export default function MarketplaceStep({ values, onChange }: MarketplaceStepPro
               <p className="mt-1 text-xs text-gray-500">Giderler düşüldükten sonra net kazanç oranı</p>
             </div>
           </div>
+          
+          {/* Son 6 Aylık Detaylı Ciro */}
+          <div className="mt-6">
+            <h4 className="text-md font-medium mb-3">Son 6 Aylık Ciro Bilgileri (Ay Ay)</h4>
+            <div className="grid gap-4 md:grid-cols-6">
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">1. Ay</label>
+                <input
+                  type="text"
+                  name="trendyolMonthlySales.month1"
+                  value={values.trendyolMonthlySales.month1}
+                  onChange={(e) => onChange({ 
+                    trendyolMonthlySales: { 
+                      ...values.trendyolMonthlySales, 
+                      month1: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">2. Ay</label>
+                <input
+                  type="text"
+                  name="trendyolMonthlySales.month2"
+                  value={values.trendyolMonthlySales.month2}
+                  onChange={(e) => onChange({ 
+                    trendyolMonthlySales: { 
+                      ...values.trendyolMonthlySales, 
+                      month2: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">3. Ay</label>
+                <input
+                  type="text"
+                  name="trendyolMonthlySales.month3"
+                  value={values.trendyolMonthlySales.month3}
+                  onChange={(e) => onChange({ 
+                    trendyolMonthlySales: { 
+                      ...values.trendyolMonthlySales, 
+                      month3: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">4. Ay</label>
+                <input
+                  type="text"
+                  name="trendyolMonthlySales.month4"
+                  value={values.trendyolMonthlySales.month4}
+                  onChange={(e) => onChange({ 
+                    trendyolMonthlySales: { 
+                      ...values.trendyolMonthlySales, 
+                      month4: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">5. Ay</label>
+                <input
+                  type="text"
+                  name="trendyolMonthlySales.month5"
+                  value={values.trendyolMonthlySales.month5}
+                  onChange={(e) => onChange({ 
+                    trendyolMonthlySales: { 
+                      ...values.trendyolMonthlySales, 
+                      month5: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">6. Ay</label>
+                <input
+                  type="text"
+                  name="trendyolMonthlySales.month6"
+                  value={values.trendyolMonthlySales.month6}
+                  onChange={(e) => onChange({ 
+                    trendyolMonthlySales: { 
+                      ...values.trendyolMonthlySales, 
+                      month6: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+            </div>
+            <p className="mt-2 text-xs text-gray-500">Son 6 ayın her ayı için ciro bilgisini ayrı ayrı giriniz (en son ay sağda olacak şekilde)</p>
+          </div>
         </div>
       )}
 
@@ -94,7 +198,7 @@ export default function MarketplaceStep({ values, onChange }: MarketplaceStepPro
           <div className="grid gap-6 mb-6 md:grid-cols-3">
             <div>
               <label className="block mb-2 text-sm font-medium text-gray-900">
-                Son 6 Aylık Ciro <span className="text-red-500">*</span>
+                Son 6 Aylık Toplam Ciro <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -138,6 +242,110 @@ export default function MarketplaceStep({ values, onChange }: MarketplaceStepPro
               <p className="mt-1 text-xs text-gray-500">Giderler düşüldükten sonra net kazanç oranı</p>
             </div>
           </div>
+          
+          {/* Son 6 Aylık Detaylı Ciro */}
+          <div className="mt-6">
+            <h4 className="text-md font-medium mb-3">Son 6 Aylık Ciro Bilgileri (Ay Ay)</h4>
+            <div className="grid gap-4 md:grid-cols-6">
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">1. Ay</label>
+                <input
+                  type="text"
+                  name="hepsiburadaMonthlySales.month1"
+                  value={values.hepsiburadaMonthlySales.month1}
+                  onChange={(e) => onChange({ 
+                    hepsiburadaMonthlySales: { 
+                      ...values.hepsiburadaMonthlySales, 
+                      month1: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">2. Ay</label>
+                <input
+                  type="text"
+                  name="hepsiburadaMonthlySales.month2"
+                  value={values.hepsiburadaMonthlySales.month2}
+                  onChange={(e) => onChange({ 
+                    hepsiburadaMonthlySales: { 
+                      ...values.hepsiburadaMonthlySales, 
+                      month2: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">3. Ay</label>
+                <input
+                  type="text"
+                  name="hepsiburadaMonthlySales.month3"
+                  value={values.hepsiburadaMonthlySales.month3}
+                  onChange={(e) => onChange({ 
+                    hepsiburadaMonthlySales: { 
+                      ...values.hepsiburadaMonthlySales, 
+                      month3: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">4. Ay</label>
+                <input
+                  type="text"
+                  name="hepsiburadaMonthlySales.month4"
+                  value={values.hepsiburadaMonthlySales.month4}
+                  onChange={(e) => onChange({ 
+                    hepsiburadaMonthlySales: { 
+                      ...values.hepsiburadaMonthlySales, 
+                      month4: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">5. Ay</label>
+                <input
+                  type="text"
+                  name="hepsiburadaMonthlySales.month5"
+                  value={values.hepsiburadaMonthlySales.month5}
+                  onChange={(e) => onChange({ 
+                    hepsiburadaMonthlySales: { 
+                      ...values.hepsiburadaMonthlySales, 
+                      month5: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">6. Ay</label>
+                <input
+                  type="text"
+                  name="hepsiburadaMonthlySales.month6"
+                  value={values.hepsiburadaMonthlySales.month6}
+                  onChange={(e) => onChange({ 
+                    hepsiburadaMonthlySales: { 
+                      ...values.hepsiburadaMonthlySales, 
+                      month6: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+            </div>
+            <p className="mt-2 text-xs text-gray-500">Son 6 ayın her ayı için ciro bilgisini ayrı ayrı giriniz (en son ay sağda olacak şekilde)</p>
+          </div>
         </div>
       )}
 
@@ -149,7 +357,7 @@ export default function MarketplaceStep({ values, onChange }: MarketplaceStepPro
           <div className="grid gap-6 mb-6 md:grid-cols-3">
             <div>
               <label className="block mb-2 text-sm font-medium text-gray-900">
-                Son 6 Aylık Ciro <span className="text-red-500">*</span>
+                Son 6 Aylık Toplam Ciro <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -193,6 +401,110 @@ export default function MarketplaceStep({ values, onChange }: MarketplaceStepPro
               <p className="mt-1 text-xs text-gray-500">Giderler düşüldükten sonra net kazanç oranı</p>
             </div>
           </div>
+          
+          {/* Son 6 Aylık Detaylı Ciro */}
+          <div className="mt-6">
+            <h4 className="text-md font-medium mb-3">Son 6 Aylık Ciro Bilgileri (Ay Ay)</h4>
+            <div className="grid gap-4 md:grid-cols-6">
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">1. Ay</label>
+                <input
+                  type="text"
+                  name="amazonMonthlySales.month1"
+                  value={values.amazonMonthlySales.month1}
+                  onChange={(e) => onChange({ 
+                    amazonMonthlySales: { 
+                      ...values.amazonMonthlySales, 
+                      month1: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">2. Ay</label>
+                <input
+                  type="text"
+                  name="amazonMonthlySales.month2"
+                  value={values.amazonMonthlySales.month2}
+                  onChange={(e) => onChange({ 
+                    amazonMonthlySales: { 
+                      ...values.amazonMonthlySales, 
+                      month2: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">3. Ay</label>
+                <input
+                  type="text"
+                  name="amazonMonthlySales.month3"
+                  value={values.amazonMonthlySales.month3}
+                  onChange={(e) => onChange({ 
+                    amazonMonthlySales: { 
+                      ...values.amazonMonthlySales, 
+                      month3: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">4. Ay</label>
+                <input
+                  type="text"
+                  name="amazonMonthlySales.month4"
+                  value={values.amazonMonthlySales.month4}
+                  onChange={(e) => onChange({ 
+                    amazonMonthlySales: { 
+                      ...values.amazonMonthlySales, 
+                      month4: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">5. Ay</label>
+                <input
+                  type="text"
+                  name="amazonMonthlySales.month5"
+                  value={values.amazonMonthlySales.month5}
+                  onChange={(e) => onChange({ 
+                    amazonMonthlySales: { 
+                      ...values.amazonMonthlySales, 
+                      month5: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">6. Ay</label>
+                <input
+                  type="text"
+                  name="amazonMonthlySales.month6"
+                  value={values.amazonMonthlySales.month6}
+                  onChange={(e) => onChange({ 
+                    amazonMonthlySales: { 
+                      ...values.amazonMonthlySales, 
+                      month6: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+            </div>
+            <p className="mt-2 text-xs text-gray-500">Son 6 ayın her ayı için ciro bilgisini ayrı ayrı giriniz (en son ay sağda olacak şekilde)</p>
+          </div>
         </div>
       )}
 
@@ -204,7 +516,7 @@ export default function MarketplaceStep({ values, onChange }: MarketplaceStepPro
           <div className="grid gap-6 mb-6 md:grid-cols-3">
             <div>
               <label className="block mb-2 text-sm font-medium text-gray-900">
-                Son 6 Aylık Ciro <span className="text-red-500">*</span>
+                Son 6 Aylık Toplam Ciro <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -247,6 +559,110 @@ export default function MarketplaceStep({ values, onChange }: MarketplaceStepPro
               />
               <p className="mt-1 text-xs text-gray-500">Giderler düşüldükten sonra net kazanç oranı</p>
             </div>
+          </div>
+          
+          {/* Son 6 Aylık Detaylı Ciro */}
+          <div className="mt-6">
+            <h4 className="text-md font-medium mb-3">Son 6 Aylık Ciro Bilgileri (Ay Ay)</h4>
+            <div className="grid gap-4 md:grid-cols-6">
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">1. Ay</label>
+                <input
+                  type="text"
+                  name="n11MonthlySales.month1"
+                  value={values.n11MonthlySales.month1}
+                  onChange={(e) => onChange({ 
+                    n11MonthlySales: { 
+                      ...values.n11MonthlySales, 
+                      month1: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">2. Ay</label>
+                <input
+                  type="text"
+                  name="n11MonthlySales.month2"
+                  value={values.n11MonthlySales.month2}
+                  onChange={(e) => onChange({ 
+                    n11MonthlySales: { 
+                      ...values.n11MonthlySales, 
+                      month2: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">3. Ay</label>
+                <input
+                  type="text"
+                  name="n11MonthlySales.month3"
+                  value={values.n11MonthlySales.month3}
+                  onChange={(e) => onChange({ 
+                    n11MonthlySales: { 
+                      ...values.n11MonthlySales, 
+                      month3: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">4. Ay</label>
+                <input
+                  type="text"
+                  name="n11MonthlySales.month4"
+                  value={values.n11MonthlySales.month4}
+                  onChange={(e) => onChange({ 
+                    n11MonthlySales: { 
+                      ...values.n11MonthlySales, 
+                      month4: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">5. Ay</label>
+                <input
+                  type="text"
+                  name="n11MonthlySales.month5"
+                  value={values.n11MonthlySales.month5}
+                  onChange={(e) => onChange({ 
+                    n11MonthlySales: { 
+                      ...values.n11MonthlySales, 
+                      month5: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">6. Ay</label>
+                <input
+                  type="text"
+                  name="n11MonthlySales.month6"
+                  value={values.n11MonthlySales.month6}
+                  onChange={(e) => onChange({ 
+                    n11MonthlySales: { 
+                      ...values.n11MonthlySales, 
+                      month6: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+            </div>
+            <p className="mt-2 text-xs text-gray-500">Son 6 ayın her ayı için ciro bilgisini ayrı ayrı giriniz (en son ay sağda olacak şekilde)</p>
           </div>
         </div>
       )}

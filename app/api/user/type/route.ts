@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import dbConnect from '@/app/lib/mongodb'
 import User from '@/app/models/User'
-import jwt from 'jsonwebtoken'
+const jwt = require('jsonwebtoken')
 import { generateToken } from '@/app/lib/jwt'
 
 // Sunucu tarafında token doğrulama (client tarafındaki verifyToken yerine)

@@ -29,21 +29,61 @@ export type FormValues = {
   trendyolSales: string
   trendyolRating: string
   trendyolProfitMargin: string
+  trendyolMonthlySales: {
+    month1: string
+    month2: string
+    month3: string
+    month4: string
+    month5: string
+    month6: string
+  }
   amazonSales: string
   amazonRating: string
   amazonProfitMargin: string
+  amazonMonthlySales: {
+    month1: string
+    month2: string
+    month3: string
+    month4: string
+    month5: string
+    month6: string
+  }
   hepsiburadaSales: string
   hepsiburadaRating: string
   hepsiburadaProfitMargin: string
+  hepsiburadaMonthlySales: {
+    month1: string
+    month2: string
+    month3: string
+    month4: string
+    month5: string
+    month6: string
+  }
   n11Sales: string
   n11Rating: string
   n11ProfitMargin: string
+  n11MonthlySales: {
+    month1: string
+    month2: string
+    month3: string
+    month4: string
+    month5: string
+    month6: string
+  }
   
   // Web Sitesi Bilgileri
   hasWebsite: boolean
   websiteUrl: string
   salesCount: string
   websiteSales: string
+  websiteMonthlySales: {
+    month1: string
+    month2: string
+    month3: string
+    month4: string
+    month5: string
+    month6: string
+  }
   visitCount: string
   websiteProfitMargin: string
   ecommerceInfrastructure: string
@@ -97,20 +137,60 @@ const initialValues: FormValues = {
   trendyolSales: '',
   trendyolRating: '',
   trendyolProfitMargin: '',
+  trendyolMonthlySales: {
+    month1: '',
+    month2: '',
+    month3: '',
+    month4: '',
+    month5: '',
+    month6: ''
+  },
   amazonSales: '',
   amazonRating: '',
   amazonProfitMargin: '',
+  amazonMonthlySales: {
+    month1: '',
+    month2: '',
+    month3: '',
+    month4: '',
+    month5: '',
+    month6: ''
+  },
   hepsiburadaSales: '',
   hepsiburadaRating: '',
   hepsiburadaProfitMargin: '',
+  hepsiburadaMonthlySales: {
+    month1: '',
+    month2: '',
+    month3: '',
+    month4: '',
+    month5: '',
+    month6: ''
+  },
   n11Sales: '',
   n11Rating: '',
   n11ProfitMargin: '',
+  n11MonthlySales: {
+    month1: '',
+    month2: '',
+    month3: '',
+    month4: '',
+    month5: '',
+    month6: ''
+  },
   
   hasWebsite: false,
   websiteUrl: '',
   salesCount: '',
   websiteSales: '',
+  websiteMonthlySales: {
+    month1: '',
+    month2: '',
+    month3: '',
+    month4: '',
+    month5: '',
+    month6: ''
+  },
   visitCount: '',
   websiteProfitMargin: '',
   ecommerceInfrastructure: '',
@@ -246,14 +326,14 @@ export default function CreateListingForm() {
         return (
           <CategoryStep 
             values={formValues} 
-            onChange={(values) => setFormValues({ ...formValues, ...values })} 
+            onChange={(values: Record<string, any>) => setFormValues({ ...formValues, ...values })} 
           />
         );
       case 'sales-channels':
         return (
           <SalesChannelsStep 
             values={formValues} 
-            onChange={(values) => {
+            onChange={(values: Record<string, any>) => {
               // Satış kanalları değiştiğinde form yeniden hesaplansın
               setFormValues({ ...formValues, ...values });
             }} 
@@ -330,7 +410,6 @@ export default function CreateListingForm() {
     setIsSubmitting(true)
     
     try {
-      // API'ye formValues gönderilerek kayıt yapılacak
       const response = await fetch('/api/listings/create', {
         method: 'POST',
         headers: {

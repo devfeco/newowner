@@ -41,13 +41,11 @@ export const verifyToken = (token: string): {
     
     // jwt-decode ile token içeriğini çözümle (tarayıcıda çalışır)
     const decoded = jwtDecode(token)
-    
     // Gerekli alanların varlığını kontrol et
-    if (!decoded || !decoded.id || !decoded.email) {
+    if (!decoded || !('id' in decoded) || !('email' in decoded)) {
       console.error('Geçersiz token yapısı')
       return null
     }
-    
     return decoded as {
       id: string
       email: string

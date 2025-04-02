@@ -141,6 +141,110 @@ export default function WebsiteStep({ values, onChange }: WebsiteStepProps) {
             <p className="mt-1 text-xs text-gray-500">Lütfen sadece site cirolarını giriniz</p>
           </div>
           
+          {/* Son 6 Aylık Detaylı Ciro */}
+          <div className="col-span-2 mt-6">
+            <h4 className="text-md font-medium mb-3">Son 6 Aylık Ciro Bilgileri (Ay Ay)</h4>
+            <div className="grid gap-4 md:grid-cols-6">
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">1. Ay</label>
+                <input
+                  type="text"
+                  name="websiteMonthlySales.month1"
+                  value={values.websiteMonthlySales.month1}
+                  onChange={(e) => onChange({ 
+                    websiteMonthlySales: { 
+                      ...values.websiteMonthlySales, 
+                      month1: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">2. Ay</label>
+                <input
+                  type="text"
+                  name="websiteMonthlySales.month2"
+                  value={values.websiteMonthlySales.month2}
+                  onChange={(e) => onChange({ 
+                    websiteMonthlySales: { 
+                      ...values.websiteMonthlySales, 
+                      month2: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">3. Ay</label>
+                <input
+                  type="text"
+                  name="websiteMonthlySales.month3"
+                  value={values.websiteMonthlySales.month3}
+                  onChange={(e) => onChange({ 
+                    websiteMonthlySales: { 
+                      ...values.websiteMonthlySales, 
+                      month3: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">4. Ay</label>
+                <input
+                  type="text"
+                  name="websiteMonthlySales.month4"
+                  value={values.websiteMonthlySales.month4}
+                  onChange={(e) => onChange({ 
+                    websiteMonthlySales: { 
+                      ...values.websiteMonthlySales, 
+                      month4: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">5. Ay</label>
+                <input
+                  type="text"
+                  name="websiteMonthlySales.month5"
+                  value={values.websiteMonthlySales.month5}
+                  onChange={(e) => onChange({ 
+                    websiteMonthlySales: { 
+                      ...values.websiteMonthlySales, 
+                      month5: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs font-medium text-gray-900">6. Ay</label>
+                <input
+                  type="text"
+                  name="websiteMonthlySales.month6"
+                  value={values.websiteMonthlySales.month6}
+                  onChange={(e) => onChange({ 
+                    websiteMonthlySales: { 
+                      ...values.websiteMonthlySales, 
+                      month6: e.target.value 
+                    } 
+                  })}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="TL"
+                />
+              </div>
+            </div>
+            <p className="mt-2 text-xs text-gray-500">Son 6 ayın her ayı için ciro bilgisini ayrı ayrı giriniz (en son ay sağda olacak şekilde)</p>
+          </div>
+          
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900">
               Son 6 Aylık Hit Sayısı
