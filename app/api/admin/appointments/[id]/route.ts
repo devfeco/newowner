@@ -5,7 +5,6 @@ import { verifyToken } from '@/app/lib/jwt'
 
 type Params = Promise<{ id: string }>;
 
-
 export async function PUT(
   request: NextRequest,
   { params }: { params: Params }

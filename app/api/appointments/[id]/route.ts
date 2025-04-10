@@ -3,19 +3,16 @@ import dbConnect from '@/app/lib/mongodb'
 import Appointment from '@/app/models/Appointment'
 import { verifyToken } from '@/app/lib/jwt'
 
-type RouteParams = {
-  params: {
-    id: string
-  }
-}
+type Params = Promise<{ id: string }>;
+
 
 export async function GET(
   request: NextRequest,
-    { params }: RouteParams
+    { params }: { params: Params }
 ) {
   try {
     await dbConnect()
-    const id = params.id
+    const id = (await params).id
     
     // Randevuyu bul
     const appointment = await Appointment.findById(id)
@@ -43,11 +40,11 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-    { params }: RouteParams
+  { params }: { params: Params }
 ) {
   try {
     await dbConnect()
-    const id = params.id
+    const id = (await params).id
     const body = await request.json()
     
     // Token kontrolü
@@ -103,11 +100,11 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: RouteParams
+  { params }: { params: Params }
 ) {
   try {
     await dbConnect()
-    const id = params.id
+    const id = (await params).id
     
     // Token kontrolü
     const token = request.headers.get('Authorization')?.split(' ')[1]

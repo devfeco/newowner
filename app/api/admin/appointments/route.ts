@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     const decoded = await verifyToken(token)
     
     // Sadece admin kullanıcılara izin ver
-    if (decoded.userType !== 'admin') {
+    if (decoded && decoded.userType !== 'admin') {
       return NextResponse.json({
         success: false,
         message: 'Bu işlem için yetkiniz bulunmamaktadır'

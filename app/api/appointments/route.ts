@@ -17,12 +17,12 @@ export async function POST(request: NextRequest) {
     if (token) {
       try {
         const decoded = await verifyToken(token)
-        userId = decoded.userId
+        userId = decoded?.id
         
         // Kullanıcının bu liste için zaten randevusu var mı kontrol et
         const existingAppointment = await Appointment.findOne({
           listingId,
-          userId: decoded.userId
+          userId: decoded?.id
         })
         
         if (existingAppointment) {
@@ -94,7 +94,7 @@ export async function GET(request: NextRequest) {
     }
     
     const decoded = await verifyToken(token)
-    const userId = decoded.userId
+    const userId = decoded?.id
     
     // Kullanıcının randevularını getir
     const appointments = await Appointment.find({ userId }).sort({ appointmentDate: -1 })
