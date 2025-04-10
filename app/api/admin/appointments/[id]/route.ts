@@ -5,7 +5,7 @@ import { verifyToken } from '@/app/lib/jwt'
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } } & { json: () => Promise<any> }
 ) {
   try {
     await dbConnect()
@@ -25,9 +25,8 @@ export async function PUT(
     
     // Token'ı doğrula ve kullanıcı bilgilerini al
     const decoded = await verifyToken(token)
-    
     // Sadece admin kullanıcılara izin ver
-    if (decoded.userType !== 'admin') {
+    if (!decoded || decoded.userType !== 'admin') {
       return NextResponse.json({
         success: false,
         message: 'Bu işlem için yetkiniz bulunmamaktadır'
