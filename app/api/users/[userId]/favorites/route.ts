@@ -3,12 +3,14 @@ import dbConnect from '@/app/lib/mongodb'
 import jwt from 'jsonwebtoken'
 import mongoose from 'mongoose'
 
+type Params = Promise<{ userId: string }>;
+
 export async function GET(
   req: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Params }
 ) {
   try {
-    const userId = params.userId
+    const userId = (await params).userId
     
     // Veritabanına bağlan
     await dbConnect()
