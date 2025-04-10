@@ -3,14 +3,16 @@ import dbConnect from '@/lib/dbConnect';
 import Listing from '@/app/models/Listing';
 import { isValidObjectId } from 'mongoose';
 
+type Params = Promise<{ id: string }>;
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Params }
 ) {
   try {
     await dbConnect();
     
-    const id = params.id;
+    const id = (await params).id;
     
     if (!isValidObjectId(id)) {
       return NextResponse.json(
