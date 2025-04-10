@@ -3,9 +3,15 @@ import dbConnect from '@/app/lib/mongodb'
 import Appointment from '@/app/models/Appointment'
 import { verifyToken } from '@/app/lib/jwt'
 
+type RouteParams = {
+  params: {
+    id: string
+  }
+}
+
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } } & { json: () => Promise<any> }
+  { params }: RouteParams
 ) {
   try {
     await dbConnect()

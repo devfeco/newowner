@@ -3,9 +3,15 @@ import dbConnect from '@/app/lib/mongodb'
 import Appointment from '@/app/models/Appointment'
 import { verifyToken } from '@/app/lib/jwt'
 
+type RouteParams = {
+  params: {
+    id: string
+  }
+}
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+    { params }: RouteParams
 ) {
   try {
     await dbConnect()
@@ -37,7 +43,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+    { params }: RouteParams
 ) {
   try {
     await dbConnect()
@@ -67,7 +73,7 @@ export async function PUT(
     }
     
     // Sadece randevuyu oluşturan kişi veya admin güncelleyebilir
-    if (appointment.userId && appointment.userId.toString() !== decoded.userId && decoded.userType !== 'admin') {
+    if (appointment.userId && appointment.userId.toString() !== decoded?.id && decoded?.userType !== 'admin') {
       return NextResponse.json({
         success: false,
         message: 'Bu işlem için yetkiniz yok'
@@ -97,7 +103,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: RouteParams
 ) {
   try {
     await dbConnect()
@@ -124,9 +130,8 @@ export async function DELETE(
         message: 'Randevu bulunamadı'
       }, { status: 404 })
     }
-    
     // Sadece randevuyu oluşturan kişi veya admin silebilir
-    if (appointment.userId && appointment.userId.toString() !== decoded.userId && decoded.userType !== 'admin') {
+    if (appointment.userId && appointment.userId.toString() !== decoded?.id && decoded?.userType !== 'admin') {
       return NextResponse.json({
         success: false,
         message: 'Bu işlem için yetkiniz yok'

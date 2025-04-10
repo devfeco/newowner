@@ -3,6 +3,12 @@ import dbConnect from '@/app/lib/mongodb'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
 
+type RouteParams = {
+  params: {
+    id: string
+  }
+}
+
 // Token'dan kullanıcı bilgilerini çıkar
 const getUserFromToken = (req: NextRequest) => {
   try {
@@ -25,7 +31,7 @@ const getUserFromToken = (req: NextRequest) => {
 // İlan onaylama/reddetme (PUT)
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } } & { json: () => Promise<any> }
+  { params }: RouteParams
 ) {
   try {
     // Token'dan kullanıcı bilgilerini al
