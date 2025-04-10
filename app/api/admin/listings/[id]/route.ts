@@ -25,7 +25,7 @@ const getUserFromToken = (req: NextRequest) => {
 // İlan onaylama/reddetme (PUT)
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } } & { json: () => Promise<any> }
 ) {
   try {
     // Token'dan kullanıcı bilgilerini al

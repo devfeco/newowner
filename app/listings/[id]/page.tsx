@@ -8,6 +8,7 @@ import { FiArrowLeft, FiHeart, FiMessageSquare, FiShare2, FiAlertTriangle, FiChe
 import { useRouter } from 'next/navigation';
 import MarketplaceChart from '@/app/components/ui/MarketplaceChart';
 import SalesDistributionChart from '@/app/components/ui/SalesDistributionChart';
+import AppointmentModal from '@/app/components/appointment/AppointmentModal';
 
 const CATEGORY_MAP = {
   'auto': 'Oto Aksesuar',
@@ -140,6 +141,7 @@ export default function ListingDetailPage() {
   const [error, setError] = useState('');
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
+  const [appointmentModalOpen, setAppointmentModalOpen] = useState(false);
   
   const id = typeof params.id === 'string' ? params.id : Array.isArray(params.id) ? params.id[0] : '';
   const isLoggedIn = Boolean(state.user);
@@ -269,6 +271,15 @@ export default function ListingDetailPage() {
   // İlanın mevcut kullanıcıya ait olup olmadığını kontrol et
   const isOwnListing = state.user && listing?.userId === state.user._id;
   
+  const openAppointmentModal = () => {
+    if (!isLoggedIn) {
+      router.push('/auth/register');
+      return;
+    }
+    
+    setAppointmentModalOpen(true);
+  };
+  
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
@@ -344,7 +355,7 @@ export default function ListingDetailPage() {
             }
             
             <button 
-              onClick={() => isLoggedIn ? null : router.push('/auth/register')}
+              onClick={() => isLoggedIn ? openAppointmentModal() : router.push('/auth/register')}
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
             >
               {isLoggedIn ? <FiMessageSquare /> : <FiUserPlus />}
@@ -525,18 +536,36 @@ export default function ListingDetailPage() {
         {/* İletişim Bölümü */}
         <div className="bg-white rounded-xl p-8 mb-8 shadow-sm border border-gray-100">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">İletişime Geç</h2>
-          <p className="text-gray-800 mb-6">
-            Bu işletme hakkında daha fazla bilgi almak veya satın alma sürecini başlatmak için satıcı ile iletişime geçin.
-          </p>
+          <div className="bg-blue-50 p-4 rounded-lg mb-6 border border-blue-100">
+            <h3 className="text-base font-medium text-gray-900 mb-2">Randevu Sistemi Hakkında</h3>
+            <p className="text-gray-900 mb-3">
+              Satıcı ile iletişime geçmek için size uygun bir tarih ve saat seçerek randevu oluşturabilirsiniz. Randevu oluşturduğunuzda:
+            </p>
+            <ul className="list-disc list-inside space-y-1 text-gray-900">
+              <li>Randevu bilgileriniz e-posta adresinize gönderilecektir</li>
+              <li>Satıcı, randevunuzu onayladığında bilgilendirileceksiniz</li>
+              <li>Randevu saatinde satıcı sizinle iletişime geçecektir</li>
+              <li>Satın alma sürecine başlamak için ek bilgilere ihtiyaç duyarsanız, randevu notlarında belirtebilirsiniz</li>
+            </ul>
+          </div>
           <button 
-            onClick={() => isLoggedIn ? null : router.push('/auth/register')}
+            onClick={() => isLoggedIn ? openAppointmentModal() : router.push('/auth/register')}
             className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2 font-medium"
           >
             <FiMessageSquare />
-            <span>{isLoggedIn ? 'Satıcıyla İletişime Geç' : 'İletişime Geçmek İçin Kaydol'}</span>
+            <span>{isLoggedIn ? 'Randevu Oluştur' : 'İletişime Geçmek İçin Kaydol'}</span>
           </button>
         </div>
       </div>
+      
+      {/* Randevu Modal */}
+      {listing && (
+        <AppointmentModal 
+          isOpen={appointmentModalOpen} 
+          onClose={() => setAppointmentModalOpen(false)} 
+          listingId={listing._id} 
+        />
+      )}
     </div>
   );
 } 

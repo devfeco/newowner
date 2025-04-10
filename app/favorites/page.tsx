@@ -99,12 +99,20 @@ export default function FavoritesPage() {
               </div>
               <div className="flex space-x-6 text-gray-700 text-sm">
                 {state.user?.userType === 'admin' && (
-                  <button 
-                    onClick={() => router.push('/admin/listing-requests')}
-                    className="hover:text-blue-600 transition-colors"
-                  >
-                    İlan Talepleri
-                  </button>
+                  <>
+                    <button 
+                      onClick={() => router.push('/admin/listing-requests')}
+                      className="hover:text-blue-600 transition-colors"
+                    >
+                      İlan Talepleri
+                    </button>
+                    <button 
+                      onClick={() => router.push('/admin/appointment-requests')}
+                      className="hover:text-blue-600 transition-colors"
+                    >
+                      Randevu Talepleri
+                    </button>
+                  </>
                 )}
               </div>
             </div>
