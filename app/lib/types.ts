@@ -4,7 +4,7 @@ export interface IUser {
   name?: string;
   email: string;
   password?: string;
-  userType?: 'buyer' | 'seller';
+  userType?: 'buyer' | 'seller' | 'admin';
   createdAt?: string | Date;
   updatedAt?: string | Date;
   __v?: number;

@@ -1,66 +1,51 @@
-import { Schema, model, models, Document } from 'mongoose'
+import { Schema, model, models } from 'mongoose'
 import bcrypt from 'bcryptjs'
-import { IUser } from '../lib/types'
 
-interface UserDocument extends Omit<IUser, '_id'>, Document {
-  comparePassword(candidatePassword: string): Promise<boolean>;
-}
-
-const userSchema = new Schema<UserDocument>(
-  {
-    fullName: {
-      type: String,
-      required: [true, 'İsim alanı gereklidir'],
-      trim: true,
-    },
-    email: {
-      type: String,
-      required: [true, 'Email alanı gereklidir'],
-      unique: true,
-      lowercase: true,
-      trim: true,
-      match: [
-        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-        'Lütfen geçerli bir email adresi girin',
-      ],
-    },
-    password: {
-      type: String,
-      required: [true, 'Şifre alanı gereklidir'],
-      minlength: [6, 'Şifre en az 6 karakter olmalıdır'],
-      select: false,
-    },
-    userType: {
-      type: String,
-      enum: ['buyer', 'seller'],
-      default: undefined,
-    }
+const userSchema = new Schema({
+  name: {
+    type: String,
+    required: true
   },
-  { timestamps: true }
-)
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  userType: {
+    type: String,
+    enum: ['buyer', 'seller', 'admin'],
+    default: 'buyer'
+  },
+  favorites: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Listing'
+  }]
+}, {
+  timestamps: true
+})
 
-// Şifre hash'leme
-userSchema.pre('save', async function (next) {
+// Password hash middleware
+userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next()
   
   try {
     const salt = await bcrypt.genSalt(10)
-    this.password = await bcrypt.hash(this.password as string, salt)
+    this.password = await bcrypt.hash(this.password, salt)
     next()
   } catch (error: any) {
     next(error)
   }
 })
 
-// Şifre karşılaştırma metodu
-userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
-  try {
-    return await bcrypt.compare(candidatePassword, this.password)
-  } catch (error) {
-    return false
-  }
+// Password compare method
+userSchema.methods.comparePassword = async function(candidatePassword: string) {
+  return bcrypt.compare(candidatePassword, this.password)
 }
 
-const User = models.User || model<UserDocument>('User', userSchema)
+const User = models.User || model('User', userSchema)
 
 export default User 

@@ -1,16 +1,53 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useAuth } from './contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import { ListingCard } from './components/ui/ListingCard'
-import { FiSearch, FiBell, FiGrid, FiLayers, FiSettings, FiCheckSquare, FiMessageSquare, FiChevronDown, FiLogOut, FiPlusCircle, FiUser } from 'react-icons/fi'
+import { ListingCardSkeleton } from './components/ui/ListingCardSkeleton'
+import { FiSearch, FiBell, FiGrid, FiLayers, FiSettings, FiCheckSquare, FiMessageSquare, FiChevronDown, FiLogOut, FiPlusCircle, FiUser, FiTwitter, FiLinkedin, FiInstagram, FiHeart } from 'react-icons/fi'
 import Image from 'next/image'
+
+interface Listing {
+  _id: string
+  type: string
+  location: string
+  foundingDate: string
+  category: string
+  yearlySales: number
+  yearlyProfit: number
+  salesCount: number
+  price: number
+  listingDescription: string
+  isApproved: boolean
+  brandName: string
+  userId: string
+}
 
 export default function HomePage() {
   const { state, logout } = useAuth()
   const router = useRouter()
   const [showSettingsMenu, setShowSettingsMenu] = useState(false)
+  const [listings, setListings] = useState<Listing[]>([])
+  const [loading, setLoading] = useState(true)
+  
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        const response = await fetch('/api/listings?isApproved=true')
+        const data = await response.json()
+        if (data.success) {
+          setListings(data.listings)
+        }
+      } catch (error) {
+        console.error('İlanları getirme hatası:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    fetchListings()
+  }, [])
   
   const handleLogout = () => {
     logout()
@@ -30,12 +67,16 @@ export default function HomePage() {
     setShowSettingsMenu(false)
     router.push('/listings/create')
   }
+
+  const navigateToFavorites = () => {
+    router.push('/favorites')
+  }
   
   return (
     <div className="min-h-screen bg-[#a9e4e8] bg-opacity-20 pt-4">
       <div className="w-[70%] mx-auto">
         {/* Header */}
-        <header className="bg-white rounded-xl mt-8 shadow-sm py-6 px-6">
+        <header className="bg-white rounded-xl mt-4 shadow-sm py-6 px-6">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-6">
               <div className="font-semibold text-lg text-gray-900">
@@ -50,18 +91,26 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="flex space-x-6 text-gray-700 text-sm">
-                <span>Girişimler</span>
-                <span>Erişim Talepleri</span>
+                {state.user?.userType === 'admin' && (
+                  <button 
+                    onClick={() => router.push('/admin/listing-requests')}
+                    className="hover:text-blue-600 transition-colors"
+                  >
+                    İlan Talepleri
+                  </button>
+                )}
               </div>
             </div>
             
             <div className="flex items-center gap-5">
-              <button className="p-2 text-gray-700">
-                <FiCheckSquare size={20} />
+              <button
+                onClick={navigateToFavorites}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-md hover:bg-gray-100 text-gray-700 transition-colors"
+              >
+                <FiHeart size={16} />
+                <span className="text-sm font-medium">Favorilerim</span>
               </button>
-              <button className="p-2 text-gray-700">
-                <FiGrid size={20} />
-              </button>
+              
               <div className="flex items-center gap-2">
                 <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
                   <FiUser size={20} />
@@ -173,305 +222,119 @@ export default function HomePage() {
           
           {/* Cards Container */}
           <div className="p-6 space-y-6">
-            {/* Card 1 */}
-            <div className="border border-gray-100 rounded-xl shadow-sm p-6">
-              <div className="flex items-center gap-1 text-sm mb-2">
-                <span className="text-gray-700">Türü:</span>
-                <span className="font-medium text-gray-900">E-Ticaret Markası</span>
-                <span className="text-gray-700 ml-4">Merkez:</span>
-                <span className="font-medium text-gray-900">İstanbul</span>
+            {loading ? (
+              <>
+                <ListingCardSkeleton />
+                <ListingCardSkeleton />
+                <ListingCardSkeleton />
+              </>
+            ) : listings.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-600">Henüz onaylanmış ilan bulunmuyor.</p>
               </div>
-              
-              <div className="flex flex-wrap gap-6 mb-4">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    K
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Kuruluş:</span>
-                    <span className="font-medium text-gray-900 ml-1">2019</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    K
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Kategori:</span>
-                    <span className="font-medium text-gray-900 ml-1">Ev Tekstili</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    Y
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Yıllık Ciro:</span>
-                    <span className="font-medium text-gray-900 ml-1">1 Milyon TL</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    Y
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Yıllık Kar:</span>
-                    <span className="font-medium text-gray-900 ml-1">500 Bin TL</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    M
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Müşteri Sayısı:</span>
-                    <span className="font-medium text-gray-900 ml-1">1.000</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    F
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Fiyat:</span>
-                    <span className="font-medium text-gray-900 ml-1">6 Milyon TL</span>
-                  </div>
-                </div>
+            ) : (
+              listings.map((listing) => (
+                <ListingCard
+                  key={listing._id}
+                  _id={listing._id.toString()}
+                  brandName={listing.brandName}
+                  location={listing.location}
+                  foundingDate={listing.foundingDate}
+                  category={listing.category}
+                  yearlySales={listing.yearlySales.toString()}
+                  yearlyProfit={listing.yearlyProfit.toString()}
+                  salesCount={listing.salesCount?.toString()}
+                  price={listing.price.toString()}
+                  listingDescription={listing.listingDescription}
+                  status={listing.isApproved ? 'Doğrulandı' : 'Beklemede'}
+                  userId={listing.userId}
+                />
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+      
+      {/* Footer */}
+      <footer className="bg-white mt-8 border-t border-gray-100">
+        <div className="w-[70%] mx-auto py-8">
+          <div className="grid grid-cols-4 gap-8">
+            {/* Logo ve Açıklama */}
+            <div className="col-span-1">
+              <div className="w-28 h-8 relative mb-4">
+                <Image
+                  src="/images/newowner-logo.png"
+                  alt="NewOwner Logo"
+                  layout="fill"
+                  objectFit="contain"
+                  priority
+                />
               </div>
-              
-              <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-sm font-medium text-gray-900">Marka Patentli E-Ticaret Sitesi</h3>
-                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#ECFDF3] border border-[#ABEFC6]">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#12B76A]"></div>
-                  <span className="text-[10px] font-medium text-[#027A48]">Doğrulandı</span>
-                </div>
-              </div>
-              
-              <p className="text-xs text-gray-800 leading-relaxed mb-4">
-                Yıl sonu, Almanya'da kurulacak şirketden dolayı ülkemizden ayrılacağım. Şuanda da buradaki işlerimin yoğunluğundan dolayı site ile ilgilenemediğimden yeni elemlerle internet ile ilgilenen kişi sadece ben olduğum için perde sitemize zaman ayıramıyoruz. Satış sebeplerim bunlardır. Siteye erişip sağlayıp whatsapp'dan bilgi almak ve sipariş vermek isteyen günde yazan müşteri sayısı 30 ile 50 aralığındadır. Lakin birçoğu ile malesef ilgilenemiyorum. Son 2 ayda 800'e yakın kişiye whatsapp üzerinden cevap veremedim üstelik halen görüldü bile olmadı.
+              <p className="text-sm text-gray-600">
+                E-ticaret'e başlamanın en kolay yolu
               </p>
-              
-              <div className="flex items-center gap-6 pt-3 border-t border-gray-100">
-                <button className="flex items-center gap-2 text-gray-700 text-xs hover:text-gray-900">
-                  <FiSearch className="w-4 h-4" />
-                  <span>Detaylar</span>
-                </button>
-                <button className="flex items-center gap-2 text-gray-700 text-xs hover:text-gray-900">
-                  <FiBell className="w-4 h-4" />
-                  <span>İzlemeye Al</span>
-                </button>
-                <button className="flex items-center gap-2 text-[#6941C6] text-xs hover:text-[#5730a3]">
-                  <FiMessageSquare className="w-4 h-4" />
-                  <span>Satıcı İle İletişime Geç</span>
-                </button>
-              </div>
             </div>
-            
-            {/* Card 2 */}
-            <div className="border border-gray-100 rounded-xl shadow-sm p-6">
-              <div className="flex items-center gap-1 text-sm mb-2">
-                <span className="text-gray-700">Türü:</span>
-                <span className="font-medium text-gray-900">E-Ticaret Sitesi</span>
-                <span className="text-gray-700 ml-4">Merkez:</span>
-                <span className="font-medium text-gray-900">Ankara</span>
-              </div>
-              
-              <div className="flex flex-wrap gap-6 mb-4">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    K
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Kuruluş:</span>
-                    <span className="font-medium text-gray-900 ml-1">2019</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    K
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Kategori:</span>
-                    <span className="font-medium text-gray-900 ml-1">Ev Tekstili</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    Y
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Yıllık Ciro:</span>
-                    <span className="font-medium text-gray-900 ml-1">1 Milyon TL</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    Y
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Yıllık Kar:</span>
-                    <span className="font-medium text-gray-900 ml-1">500 Bin TL</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    M
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Müşteri Sayısı:</span>
-                    <span className="font-medium text-gray-900 ml-1">500</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    F
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Fiyat:</span>
-                    <span className="font-medium text-gray-900 ml-1">300 Bin TL</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-sm font-medium text-gray-900">Çocuk Giyim E-Ticaret Sitesi</h3>
-                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#ECFDF3] border border-[#ABEFC6]">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#12B76A]"></div>
-                  <span className="text-[10px] font-medium text-[#027A48]">Doğrulandı</span>
-                </div>
-              </div>
-              
-              <p className="text-xs text-gray-800 leading-relaxed mb-4">
-                2019 yılından beri e-ticaret iş yapmaktayım. Son 1 yılıma tamammen Trendyola geçtik. Aylık ciromuz 40.000 TL. Tüm ürünler kendimize ait, kendi markamız altında satılmaktadır. Web sitemizden ziyade Trendyol mağazamız çok daha fazla ön planda ve son 1 yıldır websitemizden hiç satış gerçekleştirmedik. Bunun başlıca nedenlerinden birisi kargo barişletirmelerdir. Çünkü müşterilerimiz de birçok websitelerinden gidiş, trendyoldan alımını gerçekleştiriyor.
-              </p>
-              
-              <div className="flex items-center gap-6 pt-3 border-t border-gray-100">
-                <button className="flex items-center gap-2 text-gray-700 text-xs hover:text-gray-900">
-                  <FiSearch className="w-4 h-4" />
-                  <span>Detaylar</span>
-                </button>
-                <button className="flex items-center gap-2 text-gray-700 text-xs hover:text-gray-900">
-                  <FiBell className="w-4 h-4" />
-                  <span>İzlemeye Al</span>
-                </button>
-                <button className="flex items-center gap-2 text-[#6941C6] text-xs hover:text-[#5730a3]">
-                  <FiMessageSquare className="w-4 h-4" />
-                  <span>Satıcı İle İletişime Geç</span>
-                </button>
-              </div>
+
+            {/* Yasal */}
+            <div className="col-span-1">
+              <h4 className="font-medium text-gray-900 mb-4">Yasal</h4>
+              <ul className="space-y-2">
+                <li>
+                  <a href="/privacy" className="text-sm text-gray-600 hover:text-gray-900">
+                    Gizlilik Politikası
+                  </a>
+                </li>
+                <li>
+                  <a href="/terms" className="text-sm text-gray-600 hover:text-gray-900">
+                    Kullanım Koşulları
+                  </a>
+                </li>
+                <li>
+                  <a href="/cookies" className="text-sm text-gray-600 hover:text-gray-900">
+                    Çerez Politikası
+                  </a>
+                </li>
+              </ul>
             </div>
-            
-            {/* Card 3 */}
-            <div className="border border-gray-100 rounded-xl shadow-sm p-6">
-              <div className="flex items-center gap-1 text-sm mb-2">
-                <span className="text-gray-700">Türü:</span>
-                <span className="font-medium text-gray-900">E-Ticaret Markası</span>
-                <span className="text-gray-700 ml-4">Merkez:</span>
-                <span className="font-medium text-gray-900">İstanbul</span>
-              </div>
-              
-              <div className="flex flex-wrap gap-6 mb-4">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    K
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Kuruluş:</span>
-                    <span className="font-medium text-gray-900 ml-1">2019</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    K
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Kategori:</span>
-                    <span className="font-medium text-gray-900 ml-1">Ev Tekstili</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    Y
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Yıllık Ciro:</span>
-                    <span className="font-medium text-gray-900 ml-1">1 Milyon TL</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    Y
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Yıllık Kar:</span>
-                    <span className="font-medium text-gray-900 ml-1">500 Bin TL</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    M
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Müşteri Sayısı:</span>
-                    <span className="font-medium text-gray-900 ml-1">1.000</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#6941C6] flex items-center justify-center text-white text-xs font-medium">
-                    F
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-gray-700">Fiyat:</span>
-                    <span className="font-medium text-gray-900 ml-1">6 Milyon TL</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-sm font-medium text-gray-900">Marka Patentli E-Ticaret Sitesi</h3>
-                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#ECFDF3] border border-[#ABEFC6]">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#12B76A]"></div>
-                  <span className="text-[10px] font-medium text-[#027A48]">Doğrulandı</span>
-                </div>
-              </div>
-              
-              <p className="text-xs text-gray-800 leading-relaxed mb-4">
-                Yıl sonu, Almanya'da kurulacak şirketden dolayı ülkemizden ayrılacağım. Şuanda da buradaki işlerimin yoğunluğundan dolayı site ile ilgilenemediğimden yeni elemlerle internet ile ilgilenen kişi sadece ben olduğum için perde sitemize zaman ayıramıyoruz. Satış sebeplerim bunlardır. Siteye erişip sağlayıp whatsapp'dan bilgi almak ve sipariş vermek isteyen günde yazan müşteri sayısı 30 ile 50 aralığındadır. Lakin birçoğu ile malesef ilgilenemiyorum. Son 2 ayda 800'e yakın kişiye whatsapp üzerinden cevap veremedim üstelik halen görüldü bile olmadı.
+
+            {/* İletişim */}
+            <div className="col-span-1">
+              <h4 className="font-medium text-gray-900 mb-4">İletişim</h4>
+              <ul className="space-y-2">
+                <li className="text-sm text-gray-600">
+                  Email: info@newowner.com
+                </li>
+                <li className="text-sm text-gray-600">
+                  Tel: +90 (212) 123 45 67
+                </li>
+                <li className="text-sm text-gray-600">
+                  Adres: İstanbul, Türkiye
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Alt Footer */}
+          <div className="border-t border-gray-100 mt-8 pt-8">
+            <div className="flex justify-between items-center">
+              <p className="text-sm text-gray-600">
+                © 2025 NewOwner. Tüm hakları saklıdır.
               </p>
-              
-              <div className="flex items-center gap-6 pt-3 border-t border-gray-100">
-                <button className="flex items-center gap-2 text-gray-700 text-xs hover:text-gray-900">
-                  <FiSearch className="w-4 h-4" />
-                  <span>Detaylar</span>
-                </button>
-                <button className="flex items-center gap-2 text-gray-700 text-xs hover:text-gray-900">
-                  <FiBell className="w-4 h-4" />
-                  <span>İzlemeye Al</span>
-                </button>
-                <button className="flex items-center gap-2 text-[#6941C6] text-xs hover:text-[#5730a3]">
-                  <FiMessageSquare className="w-4 h-4" />
-                  <span>Satıcı İle İletişime Geç</span>
-                </button>
+              <div className="flex items-center gap-4">
+                <a href="#" className="text-gray-600 hover:text-gray-900">
+                  <FiTwitter size={18} />
+                </a>
+                <a href="#" className="text-gray-600 hover:text-gray-900">
+                  <FiLinkedin size={18} />
+                </a>
+                <a href="#" className="text-gray-600 hover:text-gray-900">
+                  <FiInstagram size={18} />
+                </a>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </footer>
     </div>
   )
 }
