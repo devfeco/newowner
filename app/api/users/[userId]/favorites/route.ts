@@ -12,7 +12,6 @@ export async function GET(
   try {
     const userId = (await params).userId
     
-    // Veritabanına bağlan
     await dbConnect()
     const db = mongoose.connection.db
     if (!db) {
