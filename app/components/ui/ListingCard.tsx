@@ -259,10 +259,6 @@ export function ListingCard({
 						{isFavorite ? 'İzlemeden Çıkar' : 'İzlemeye Al'}
 					</span>
 				</button>
-				<button className="flex items-center gap-1.5 sm:gap-2 text-[#6941C6] hover:text-[#5730a3]">
-					<FiMessageSquare className="w-[16px] h-[16px] sm:w-[18px] sm:h-[18px]" />
-					<span className="text-[12px] sm:text-[13.5px]">Satıcı İle İletişime Geç</span>
-				</button>
 			</div>
 		</div>
 	)
