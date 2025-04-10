@@ -3,20 +3,14 @@ import dbConnect from '@/app/lib/mongodb'
 import Appointment from '@/app/models/Appointment'
 import { verifyToken } from '@/app/lib/jwt'
 
-type RouteParams = {
-  params: {
-    id: string
-  }
-}
-
 export async function PUT(
   request: NextRequest,
-  { params }: RouteParams
+  context: { params: { id: string } }
 ) {
   try {
     await dbConnect()
     
-    const id = params.id
+    const id = context.params.id
     const body = await request.json()
     
     // Token kontrolü
@@ -75,4 +69,4 @@ export async function PUT(
       message: error.message || 'Randevu güncellenirken bir hata oluştu'
     }, { status: 500 })
   }
-} 
+}
