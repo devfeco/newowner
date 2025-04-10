@@ -257,8 +257,8 @@ export default function FavoritesPage() {
                 <span>Geri Dön</span>
               </button>
               <h1 className="text-lg sm:text-2xl font-semibold text-gray-900 flex items-center gap-1 sm:gap-2">
-                <FiHeart className="text-red-500" size={16} className="sm:hidden" />
-                <FiHeart className="text-red-500" size={20} className="hidden sm:block" />
+                <FiHeart className="text-red-500 sm:hidden" size={16} />
+                <FiHeart className="text-red-500 hidden sm:block" size={20} />
                 Favori İlanlarım
               </h1>
             </div>
