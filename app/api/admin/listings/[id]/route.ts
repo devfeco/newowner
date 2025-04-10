@@ -3,11 +3,7 @@ import dbConnect from '@/app/lib/mongodb'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
 
-type RouteParams = {
-  params: {
-    id: string
-  }
-}
+type Params = Promise<{ id: string }>;
 
 // Token'dan kullanıcı bilgilerini çıkar
 const getUserFromToken = (req: NextRequest) => {
@@ -31,7 +27,7 @@ const getUserFromToken = (req: NextRequest) => {
 // İlan onaylama/reddetme (PUT)
 export async function PUT(
   req: NextRequest,
-  { params }: RouteParams
+  { params }: { params: Params }
 ) {
   try {
     // Token'dan kullanıcı bilgilerini al
@@ -45,7 +41,7 @@ export async function PUT(
       }, { status: 403 })
     }
     
-    const listingId = params.id
+    const listingId = (await params).id
     console.log('İşlem yapılacak ilan ID:', listingId)
     
     if (!listingId || !mongoose.Types.ObjectId.isValid(listingId)) {
