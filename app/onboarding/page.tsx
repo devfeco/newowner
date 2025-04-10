@@ -58,7 +58,7 @@ export default function OnboardingPage() {
   if (state.isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+        <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-t-2 border-b-2 border-gray-900"></div>
       </div>
     )
   }
@@ -71,39 +71,39 @@ export default function OnboardingPage() {
       showVideo={true}
       videoId="roQK7fJ1AKo" // E-ticaret sistemleri hakkında bir video ID
     >
-      <div className="flex flex-col items-center justify-center w-full space-y-6">
-        <div className="w-full text-center mb-4">
-          <p className="text-gray-600">
+      <div className="flex flex-col items-center justify-center w-full space-y-3 sm:space-y-6">
+        <div className="w-full text-center mb-1 sm:mb-4">
+          <p className="text-gray-600 text-xs sm:text-sm">
             Platformumuzu nasıl kullanmak istediğinizi seçin. Bu seçim daha sonra profil ayarlarınızdan değiştirilebilir.
           </p>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-4 w-full">
+        <div className="flex flex-col md:flex-row gap-3 sm:gap-4 w-full">
           <div 
-            className={`flex-1 p-6 border rounded-lg cursor-pointer transition-all ${
+            className={`flex-1 p-3 sm:p-6 border rounded-lg cursor-pointer transition-all ${
               selectedType === 'buyer' 
                 ? 'border-blue-500 bg-blue-50' 
                 : 'border-gray-200 hover:border-blue-300'
             }`}
             onClick={() => handleSelectType('buyer')}
           >
-            <h3 className="text-lg font-medium mb-2 text-black">Alıcı</h3>
-            <p className="text-sm text-gray-600">
+            <h3 className="text-base sm:text-lg font-medium mb-0.5 sm:mb-2 text-black">Alıcı</h3>
+            <p className="text-xs sm:text-sm text-gray-600">
               E-Ticaret sistemi satın almak istiyorum.
             </p>
           </div>
 
           <div 
-            className={`flex-1 p-6 border rounded-lg cursor-pointer transition-all ${
+            className={`flex-1 p-3 sm:p-6 border rounded-lg cursor-pointer transition-all ${
               selectedType === 'seller' 
                 ? 'border-blue-500 bg-blue-50' 
                 : 'border-gray-200 hover:border-blue-300'
             }`}
             onClick={() => handleSelectType('seller')}
           >
-            <h3 className="text-lg font-medium mb-2 text-black">Satıcı</h3>
-            <p className="text-sm text-gray-600">
-              E-Ticaret sistemimi satın almak istiyorum.
+            <h3 className="text-base sm:text-lg font-medium mb-0.5 sm:mb-2 text-black">Satıcı</h3>
+            <p className="text-xs sm:text-sm text-gray-600">
+              E-Ticaret sistemimi satışa çıkarmak istiyorum.
             </p>
           </div>
         </div>
@@ -113,6 +113,7 @@ export default function OnboardingPage() {
           disabled={!selectedType}
           loading={isLoading}
           fullWidth
+          className="mt-1 sm:mt-4"
         >
           Devam Et
         </Button>

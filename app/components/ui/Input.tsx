@@ -20,7 +20,7 @@ export const Input = ({
   const [isFocused, setIsFocused] = useState(false)
 
   return (
-    <div className="mb-4">
+    <div className="mb-3 sm:mb-4">
       {label && (
         <label 
           className="block text-sm font-medium mb-1.5" 
@@ -32,7 +32,7 @@ export const Input = ({
       
       <div 
         className={`
-          flex items-center w-full rounded-lg px-4 py-3 transition-all
+          flex items-center w-full rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 transition-all
           ${error ? 'border-red-500' : isFocused 
             ? `border border-${theme.colors.primary.main}` 
             : 'border border-gray-200'}
@@ -45,7 +45,7 @@ export const Input = ({
         }}
       >
         {icon && (
-          <div className="flex items-center justify-center mr-3 text-gray-400">
+          <div className="flex items-center justify-center mr-2 sm:mr-3 text-gray-400">
             {icon}
           </div>
         )}

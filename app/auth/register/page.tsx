@@ -124,12 +124,12 @@ export default function RegisterPage() {
     >
       <div className="flex flex-col items-center justify-center w-full">
         {formErrors.general && (
-          <div className="w-full mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-md text-sm">
+          <div className="w-full mb-4 p-2 sm:p-3 bg-red-50 border border-red-200 text-red-700 rounded-md text-xs sm:text-sm">
             {formErrors.general}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="w-full space-y-4">
+        <form onSubmit={handleSubmit} className="w-full space-y-3 sm:space-y-4">
           <Input
             icon={<div />}
             type="text"
@@ -170,10 +170,10 @@ export default function RegisterPage() {
             error={formErrors.confirmPassword}
           />
 
-          <div className="mb-4">
+          <div className="mb-2 sm:mb-4">
             <Checkbox
               label={
-                <span>
+                <span className="text-xs sm:text-sm">
                   <button 
                     type="button"
                     onClick={() => setShowModal(true)}
@@ -188,7 +188,7 @@ export default function RegisterPage() {
               onChange={() => setAcceptTerms(!acceptTerms)}
             />
             {formErrors.terms && (
-              <p className="mt-1 text-sm text-red-600">{formErrors.terms}</p>
+              <p className="mt-1 text-xs text-red-600">{formErrors.terms}</p>
             )}
           </div>
 
@@ -196,6 +196,7 @@ export default function RegisterPage() {
             type="submit"
             fullWidth
             loading={isLoading}
+            className="mt-2 sm:mt-4"
           >
             {isLoading ? 'Kaydınız Yapılıyor...' : 'Kayıt Ol'}
           </Button>

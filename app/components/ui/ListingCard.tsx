@@ -32,13 +32,13 @@ interface InfoBadgeProps {
 
 function InfoBadge({ icon, label, value }: InfoBadgeProps) {
 	return (
-		<div className="flex items-center gap-2">
-			<div className="w-8 h-8 rounded-lg bg-[#6941C6] flex items-center justify-center text-white rounded-full">
+		<div className="flex items-center gap-1.5 sm:gap-2">
+			<div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-[#6941C6] flex items-center justify-center text-white text-xs sm:text-sm rounded-full">
 				{icon}
 			</div>
 			<div>
-				<p className="text-[13px] text-gray-500">{label}</p>
-				<p className="text-[13.5px] font-medium text-gray-900">{value}</p>
+				<p className="text-[11px] sm:text-[13px] text-gray-500">{label}</p>
+				<p className="text-[12px] sm:text-[13.5px] font-medium text-gray-900">{value}</p>
 			</div>
 		</div>
 	)
@@ -50,7 +50,7 @@ interface StatusBadgeProps {
 
 function StatusBadge({ status }: StatusBadgeProps) {
 	return (
-		<span className={`px-2 py-1 rounded-full text-[12px] font-medium ${
+		<span className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-[12px] font-medium ${
 			status === 'Doğrulandı' 
 				? 'bg-green-50 text-green-700' 
 				: 'bg-yellow-50 text-yellow-700'
@@ -198,22 +198,22 @@ export function ListingCard({
 	}
 
 	return (
-		<div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 transition-all duration-200 hover:shadow-md">
+		<div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-6 transition-all duration-200 hover:shadow-md">
 			{/* Başlık Kısmı */}
-			<div className="flex items-center gap-1 mb-8 text-[15px]">
+			<div className="flex flex-wrap items-center gap-1 mb-4 sm:mb-8 text-[13px] sm:text-[15px]">
 				<span className="text-gray-500">Marka:</span>
 				<span className="font-medium text-gray-900">{brandName}</span>
 				<span className="text-gray-500 ml-2">Merkez:</span>
 				<span className="font-medium text-gray-900">{location}</span>
 				{isOwnListing && (
-					<span className="ml-2 px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs font-medium">
+					<span className="ml-2 px-1.5 sm:px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-[10px] sm:text-xs font-medium">
 						Sizin İlanınız
 					</span>
 				)}
 			</div>
 
 			{/* Bilgi Badge'leri */}
-			<div className="flex flex-wrap items-center gap-6 mb-8">
+			<div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-3 sm:gap-6 mb-4 sm:mb-8">
 				<InfoBadge icon="K" label="Kuruluş" value={foundingDate} />
 				<InfoBadge icon="K" label="Kategori" value={CATEGORY_MAP[category] || category} />
 				<InfoBadge icon="Y" label="Yıllık Ciro" value={`${yearlySales} ₺`} />
@@ -223,40 +223,45 @@ export function ListingCard({
 			</div>
 
 			{/* Başlık ve Doğrulama Badge */}
-			<div className="flex items-center gap-2 mb-3">
-				<h3 className="text-[15px] font-medium text-gray-900">
+			<div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
+				<h3 className="text-[13px] sm:text-[15px] font-medium text-gray-900">
 					{brandName}
 				</h3>
 				<StatusBadge status={status} />
 			</div>
 
 			{/* Açıklama */}
-			<p className="text-[13.5px] leading-relaxed text-gray-600 mb-6">{listingDescription.slice(0, 300)}...</p>
+			<p className="text-[12px] sm:text-[13.5px] leading-relaxed text-gray-600 mb-4 sm:mb-6">
+				{window.innerWidth < 640 
+					? `${listingDescription.slice(0, 150)}...` 
+					: `${listingDescription.slice(0, 300)}...`
+				}
+			</p>
 
 			{/* Alt Butonlar */}
-			<div className="flex items-center gap-8 pt-4 border-t border-gray-100">
+			<div className="flex flex-wrap items-center gap-3 sm:gap-8 pt-3 sm:pt-4 border-t border-gray-100">
 				<button 
-					className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+					className="flex items-center gap-1.5 sm:gap-2 text-gray-600 hover:text-gray-900 transition-colors"
 					onClick={() => router.push(`/listings/${_id}`)}
 				>
-					<FiEye className="w-[18px] h-[18px]" />
-					<span className="text-[13.5px]">Detaylar</span>
+					<FiEye className="w-[16px] h-[16px] sm:w-[18px] sm:h-[18px]" />
+					<span className="text-[12px] sm:text-[13.5px]">Detaylar</span>
 				</button>
 				<button 
-					className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+					className="flex items-center gap-1.5 sm:gap-2 text-gray-600 hover:text-gray-900 transition-colors"
 					onClick={handleToggleFavorite}
 					disabled={loading}
 				>
 					<FiHeart 
-						className={`w-[18px] h-[18px] ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} 
+						className={`w-[16px] h-[16px] sm:w-[18px] sm:h-[18px] ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} 
 					/>
-					<span className="text-[13.5px]">
+					<span className="text-[12px] sm:text-[13.5px]">
 						{isFavorite ? 'İzlemeden Çıkar' : 'İzlemeye Al'}
 					</span>
 				</button>
-				<button className="flex items-center gap-2 text-[#6941C6] hover:text-[#5730a3]">
-					<FiMessageSquare className="w-[18px] h-[18px]" />
-					<span className="text-[13.5px]">Satıcı İle İletişime Geç</span>
+				<button className="flex items-center gap-1.5 sm:gap-2 text-[#6941C6] hover:text-[#5730a3]">
+					<FiMessageSquare className="w-[16px] h-[16px] sm:w-[18px] sm:h-[18px]" />
+					<span className="text-[12px] sm:text-[13.5px]">Satıcı İle İletişime Geç</span>
 				</button>
 			</div>
 		</div>

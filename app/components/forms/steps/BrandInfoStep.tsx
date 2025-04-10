@@ -32,10 +32,10 @@ export default function BrandInfoStep({ values, onChange }: BrandInfoStepProps) 
   ]
 
   return (
-    <div className="space-y-6">
-      <div className="grid gap-6 mb-6 md:grid-cols-2">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="grid gap-4 sm:gap-6 mb-4 sm:mb-6 grid-cols-1 md:grid-cols-2">
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-900">
+          <label className="block mb-1 sm:mb-2 text-xs sm:text-sm font-medium text-gray-900">
             Marka Adı <span className="text-red-500">*</span>
           </label>
           <input
@@ -43,14 +43,14 @@ export default function BrandInfoStep({ values, onChange }: BrandInfoStepProps) 
             name="brandName"
             value={values.brandName}
             onChange={handleInputChange}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-xs sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 sm:p-2.5"
             placeholder="NEWOWNER"
             required
           />
         </div>
         
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-900">
+          <label className="block mb-1 sm:mb-2 text-xs sm:text-sm font-medium text-gray-900">
             Kuruluş Tarihi <span className="text-red-500">*</span>
           </label>
           <input
@@ -58,7 +58,7 @@ export default function BrandInfoStep({ values, onChange }: BrandInfoStepProps) 
             name="foundingDate"
             value={values.foundingDate}
             onChange={handleInputChange}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-xs sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 sm:p-2.5"
             placeholder="28.03.2023"
             required
           />
@@ -66,9 +66,9 @@ export default function BrandInfoStep({ values, onChange }: BrandInfoStepProps) 
         </div>
       </div>
       
-      <div className="grid gap-6 mb-6 md:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 mb-4 sm:mb-6 grid-cols-1 md:grid-cols-2">
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-900">
+          <label className="block mb-1 sm:mb-2 text-xs sm:text-sm font-medium text-gray-900">
             Konum <span className="text-red-500">*</span>
           </label>
           <input
@@ -76,7 +76,7 @@ export default function BrandInfoStep({ values, onChange }: BrandInfoStepProps) 
             name="location"
             value={values.location}
             onChange={handleInputChange}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-xs sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 sm:p-2.5"
             placeholder="İSTANBUL/SANCAKTEPE"
             required
           />
@@ -84,7 +84,7 @@ export default function BrandInfoStep({ values, onChange }: BrandInfoStepProps) 
         </div>
         
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-900">
+          <label className="block mb-1 sm:mb-2 text-xs sm:text-sm font-medium text-gray-900">
             Satış Fiyatı <span className="text-red-500">*</span>
           </label>
           <input
@@ -92,7 +92,7 @@ export default function BrandInfoStep({ values, onChange }: BrandInfoStepProps) 
             name="price"
             value={values.price}
             onChange={handleInputChange}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-xs sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 sm:p-2.5"
             placeholder="1,100,000 TL"
             required
           />
@@ -100,12 +100,12 @@ export default function BrandInfoStep({ values, onChange }: BrandInfoStepProps) 
       </div>
       
       <div>
-        <label className="block mb-2 text-sm font-medium text-gray-900">
+        <label className="block mb-1 sm:mb-2 text-xs sm:text-sm font-medium text-gray-900">
           Devir Edilecekler <span className="text-red-500">*</span>
         </label>
         <p className="mb-2 text-xs text-gray-500">Devir işleminde dahil olacak varlıkları seçiniz</p>
         
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
           {transferOptions.map((option) => (
             <div key={option.id} className="flex items-center">
               <input
@@ -115,7 +115,7 @@ export default function BrandInfoStep({ values, onChange }: BrandInfoStepProps) 
                 onChange={() => handleTransferItemsChange(option.id)}
                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
               />
-              <label htmlFor={`transfer-${option.id}`} className="ml-2 text-sm font-medium text-gray-900">
+              <label htmlFor={`transfer-${option.id}`} className="ml-2 text-xs sm:text-sm font-medium text-gray-900">
                 {option.label}
               </label>
             </div>

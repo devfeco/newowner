@@ -109,7 +109,7 @@ export default function LoginPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="w-full space-y-4">
+        <form onSubmit={handleSubmit} className="w-full space-y-3 sm:space-y-4">
           <Input
             icon={<div />}
             type="email"
@@ -130,7 +130,7 @@ export default function LoginPage() {
             name="password"
           />
 
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
             <div className="flex items-center">
               <input
                 id="remember-me"
@@ -153,6 +153,7 @@ export default function LoginPage() {
             type="submit"
             fullWidth
             loading={isLoading}
+            className="mt-3 sm:mt-5"
           >
             {isLoading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
           </Button>

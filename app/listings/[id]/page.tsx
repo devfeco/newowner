@@ -282,13 +282,13 @@ export default function ListingDetailPage() {
   
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
-        <div className="w-[70%] mx-auto">
-          <div className="animate-pulse bg-white rounded-xl p-8 mb-8">
-            <div className="h-8 bg-gray-200 rounded mb-6 w-1/3"></div>
-            <div className="h-6 bg-gray-200 rounded mb-4 w-3/4"></div>
-            <div className="h-6 bg-gray-200 rounded mb-4 w-2/3"></div>
-            <div className="h-6 bg-gray-200 rounded mb-4 w-1/2"></div>
+      <div className="min-h-screen bg-gray-50 py-6 sm:py-12">
+        <div className="w-[90%] sm:w-[85%] md:w-[80%] lg:w-[75%] xl:w-[70%] mx-auto">
+          <div className="animate-pulse bg-white rounded-lg sm:rounded-xl p-4 sm:p-8 mb-4 sm:mb-8">
+            <div className="h-6 sm:h-8 bg-gray-200 rounded mb-3 sm:mb-6 w-1/3"></div>
+            <div className="h-4 sm:h-6 bg-gray-200 rounded mb-2 sm:mb-4 w-3/4"></div>
+            <div className="h-4 sm:h-6 bg-gray-200 rounded mb-2 sm:mb-4 w-2/3"></div>
+            <div className="h-4 sm:h-6 bg-gray-200 rounded mb-2 sm:mb-4 w-1/2"></div>
           </div>
         </div>
       </div>
@@ -297,15 +297,15 @@ export default function ListingDetailPage() {
   
   if (error || !listing) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
-        <div className="w-[70%] mx-auto">
-          <div className="bg-white rounded-xl p-8 mb-8 text-center">
-            <FiAlertTriangle className="w-12 h-12 mx-auto mb-4 text-red-500" />
-            <h2 className="text-2xl font-medium mb-2">İlan Bulunamadı</h2>
-            <p className="text-gray-600 mb-6">{error || 'Bu ilan mevcut değil veya kaldırılmış olabilir.'}</p>
+      <div className="min-h-screen bg-gray-50 py-6 sm:py-12">
+        <div className="w-[90%] sm:w-[85%] md:w-[80%] lg:w-[75%] xl:w-[70%] mx-auto">
+          <div className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-8 mb-4 sm:mb-8 text-center">
+            <FiAlertTriangle className="w-8 h-8 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 text-red-500" />
+            <h2 className="text-xl sm:text-2xl font-medium mb-1 sm:mb-2">İlan Bulunamadı</h2>
+            <p className="text-gray-600 mb-4 sm:mb-6">{error || 'Bu ilan mevcut değil veya kaldırılmış olabilir.'}</p>
             <button 
               onClick={() => router.push('/')}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               Ana Sayfaya Dön
             </button>
@@ -325,25 +325,25 @@ export default function ListingDetailPage() {
   };
   
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="w-[70%] mx-auto">
+    <div className="min-h-screen bg-gray-50 py-4 sm:py-8">
+      <div className="w-[90%] sm:w-[85%] md:w-[80%] lg:w-[75%] xl:w-[70%] mx-auto">
         {/* Üst Butonlar */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-wrap justify-between items-center mb-3 sm:mb-6 gap-2">
           <button 
             onClick={() => router.back()}
-            className="flex items-center gap-2 text-gray-700 hover:text-gray-900"
+            className="flex items-center gap-1 sm:gap-2 text-gray-700 hover:text-gray-900 text-sm sm:text-base"
           >
             <FiArrowLeft />
             <span>Geri Dön</span>
           </button>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             {
               isLoggedIn &&
               <button 
               onClick={handleToggleFavorite}
               disabled={favoriteLoading || !isLoggedIn}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${
+              className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-2 rounded-lg border text-xs sm:text-sm ${
                 isFavorite 
                   ? 'bg-red-50 text-red-600 border-red-200' 
                   : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
@@ -356,7 +356,7 @@ export default function ListingDetailPage() {
             
             <button 
               onClick={() => isLoggedIn ? openAppointmentModal() : router.push('/auth/register')}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-xs sm:text-sm"
             >
               {isLoggedIn ? <FiMessageSquare /> : <FiUserPlus />}
               <span>{isLoggedIn ? 'İletişime Geç' : 'Kaydol'}</span>
@@ -365,21 +365,21 @@ export default function ListingDetailPage() {
         </div>
         
         {/* İlan Başlık */}
-        <div className="bg-white rounded-xl p-8 mb-8 shadow-sm border border-gray-100">
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-2xl font-semibold text-gray-900">{listing.brandName}</h1>
-            <div className={`px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1 ${
+        <div className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-8 mb-4 sm:mb-8 shadow-sm border border-gray-100">
+          <div className="flex flex-wrap items-center justify-between mb-3 sm:mb-6 gap-2">
+            <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{listing.brandName}</h1>
+            <div className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium flex items-center gap-1 ${
               listing.isApproved 
                 ? 'bg-green-50 text-green-700' 
                 : 'bg-yellow-50 text-yellow-700'
             }`}>
               {listing.isApproved 
-                ? <><FiCheckCircle /> Doğrulanmış İlan</> 
-                : <><FiAlertTriangle /> Onay Bekliyor</>}
+                ? <><FiCheckCircle className="w-3 h-3 sm:w-4 sm:h-4" /> Doğrulanmış İlan</> 
+                : <><FiAlertTriangle className="w-3 h-3 sm:w-4 sm:h-4" /> Onay Bekliyor</>}
             </div>
           </div>
           
-          <div className="flex items-center gap-6 text-gray-800 mb-6 text-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-gray-800 mb-3 sm:mb-6 text-xs sm:text-sm">
             <div>
               <span className="text-gray-700 font-medium">Merkez Lokasyonu:</span> <span className="font-semibold text-gray-900">{listing.location}</span>
             </div>
@@ -390,27 +390,27 @@ export default function ListingDetailPage() {
               <span className="text-gray-700 font-medium">Kuruluş Tarihi:</span> <span className="font-semibold text-gray-900">{listing.foundingDate}</span>
             </div>
             {isOwnListing && (
-              <span className="ml-auto px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
+              <span className="sm:ml-auto px-2 sm:px-3 py-0.5 sm:py-1 bg-blue-50 text-blue-700 rounded-full text-xs sm:text-sm font-medium">
                 Sizin İlanınız
               </span>
             )}
           </div>
           
-          <hr className="my-6 border-gray-100" />
+          <hr className="my-3 sm:my-6 border-gray-100" />
           
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Açıklama</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-4">Açıklama</h2>
           <div className="relative">
-            <p className="text-gray-800 leading-relaxed whitespace-pre-line">
+            <p className="text-gray-800 leading-relaxed whitespace-pre-line text-sm sm:text-base">
               {truncateDescription(listing.listingDescription)}
             </p>
             
             {!isLoggedIn && listing.listingDescription.length > 500 && (
               <>
-                <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent"></div>
-                <div className="absolute bottom-50 left-0 w-full text-center">
+                <div className="absolute bottom-0 left-0 w-full h-24 sm:h-32 bg-gradient-to-t from-white to-transparent"></div>
+                <div className="absolute bottom-12 sm:bottom-16 left-0 w-full text-center">
                   <button 
                     onClick={() => router.push('/auth/register')}
-                    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium shadow-lg hover:shadow-xl transition-all"
+                    className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium shadow-lg hover:shadow-xl transition-all text-xs sm:text-sm"
                   >
                     İlanın Tamamını Görmek İçin Şimdi Kaydol
                   </button>
@@ -424,13 +424,13 @@ export default function ListingDetailPage() {
         </div>
         
         {/* İlan Bilgileri */}
-        <div className={`mb-8 ${!isLoggedIn ? 'relative' : ''}`}>
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">İlan Detayları</h2>
-          <div className={`grid grid-cols-4 gap-4 ${!isLoggedIn ? 'blur-[15px] select-none' : ''}`}>
+        <div className={`mb-4 sm:mb-8 ${!isLoggedIn ? 'relative' : ''}`}>
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-4">İlan Detayları</h2>
+          <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-4 ${!isLoggedIn ? 'blur-[15px] select-none' : ''}`}>
             <InfoCard title="Marka Adı" value={listing.brandName} />
             <InfoCard title="Kuruluş Tarihi" value={listing.foundingDate} />
             <InfoCard title="Kategori" value={CATEGORY_MAP[listing.category as keyof typeof CATEGORY_MAP] || listing.category} />
-              <InfoCard title="Lokasyon" value={listing.location} />
+            <InfoCard title="Lokasyon" value={listing.location} />
             <InfoCard title="Satış Fiyatı" value={listing.price} prefix="" suffix=" ₺" />
             <InfoCard title="Yıllık Ciro" value={listing.yearlySales} prefix="" suffix=" ₺" />
             <InfoCard title="Yıllık Kar" value={listing.yearlyProfit} prefix="" suffix=" ₺" />
@@ -441,7 +441,7 @@ export default function ListingDetailPage() {
             <div className="absolute inset-0 flex items-center justify-center">
               <button 
                 onClick={() => router.push('/auth/register')}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+                className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-xs sm:text-sm"
               >
                 Detayları Görmek İçin Kaydol
               </button>
@@ -451,18 +451,18 @@ export default function ListingDetailPage() {
         
         {/* Pazaryeri Verileri */}
         {listing.hasMarketplaces && (
-          <div className={`mb-8 ${!isLoggedIn ? 'relative' : ''}`}>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Pazaryeri Verileri</h2>
+          <div className={`mb-4 sm:mb-8 ${!isLoggedIn ? 'relative' : ''}`}>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-4">Pazaryeri Verileri</h2>
             
             <div className={!isLoggedIn ? 'blur-[15px] select-none' : ''}>
               {/* Satış Dağılımı Pasta Grafiği */}
               <SalesDistributionChart salesData={salesDistributionData} />
               
-              <p className="text-gray-800 mb-6">
+              <p className="text-sm sm:text-base text-gray-800 mb-3 sm:mb-6">
                 Bu işletmenin son 6 aylık pazaryeri satış verileri aşağıda gösterilmektedir.
               </p>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-4">
                 {/* Trendyol Grafiği */}
                 {listing.marketplaces?.includes('trendyol') && (
                   <MarketplaceChart
@@ -524,7 +524,7 @@ export default function ListingDetailPage() {
               <div className="absolute inset-0 flex items-center justify-center">
                 <button 
                   onClick={() => router.push('/auth/register')}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+                  className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-xs sm:text-sm"
                 >
                   Pazaryeri Verilerini Görmek İçin Kaydol
                 </button>
@@ -534,14 +534,14 @@ export default function ListingDetailPage() {
         )}
         
         {/* İletişim Bölümü */}
-        <div className="bg-white rounded-xl p-8 mb-8 shadow-sm border border-gray-100">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">İletişime Geç</h2>
-          <div className="bg-blue-50 p-4 rounded-lg mb-6 border border-blue-100">
-            <h3 className="text-base font-medium text-gray-900 mb-2">Randevu Sistemi Hakkında</h3>
-            <p className="text-gray-900 mb-3">
+        <div className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-8 mb-4 sm:mb-8 shadow-sm border border-gray-100">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-4">İletişime Geç</h2>
+          <div className="bg-blue-50 p-3 sm:p-4 rounded-lg mb-3 sm:mb-6 border border-blue-100">
+            <h3 className="text-sm sm:text-base font-medium text-gray-900 mb-1 sm:mb-2">Randevu Sistemi Hakkında</h3>
+            <p className="text-xs sm:text-sm text-gray-900 mb-2 sm:mb-3">
               Satıcı ile iletişime geçmek için size uygun bir tarih ve saat seçerek randevu oluşturabilirsiniz. Randevu oluşturduğunuzda:
             </p>
-            <ul className="list-disc list-inside space-y-1 text-gray-900">
+            <ul className="list-disc list-inside space-y-0.5 sm:space-y-1 text-xs sm:text-sm text-gray-900">
               <li>Randevu bilgileriniz e-posta adresinize gönderilecektir</li>
               <li>Satıcı, randevunuzu onayladığında bilgilendirileceksiniz</li>
               <li>Randevu saatinde satıcı sizinle iletişime geçecektir</li>
@@ -550,7 +550,7 @@ export default function ListingDetailPage() {
           </div>
           <button 
             onClick={() => isLoggedIn ? openAppointmentModal() : router.push('/auth/register')}
-            className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2 font-medium"
+            className="w-full py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center gap-1 sm:gap-2 font-medium text-xs sm:text-sm"
           >
             <FiMessageSquare />
             <span>{isLoggedIn ? 'Randevu Oluştur' : 'İletişime Geçmek İçin Kaydol'}</span>

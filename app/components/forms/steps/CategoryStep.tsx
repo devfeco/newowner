@@ -32,17 +32,17 @@ export default function CategoryStep({ values, onChange }: CategoryStepProps) {
   }
 
   return (
-    <div className="space-y-6">
-      <p className="text-gray-600 mb-4">
+    <div className="space-y-4 sm:space-y-6">
+      <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-4">
         Lütfen markanızın ürünlerinin yer aldığı ana kategoriyi seçin. Bu seçim, ilanınızınızın doğru alıcılara ulaşmasında önemli rol oynayacaktır.
       </p>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
         {categories.map((category) => (
           <div 
             key={category.id}
             onClick={() => handleCategorySelect(category.id)}
-            className={`border rounded-lg p-4 cursor-pointer transition-all ${
+            className={`border rounded-lg p-3 sm:p-4 cursor-pointer transition-all ${
               values.category === category.id 
                 ? 'border-blue-500 bg-blue-50' 
                 : 'border-gray-200 hover:border-blue-200'
@@ -55,27 +55,27 @@ export default function CategoryStep({ values, onChange }: CategoryStepProps) {
                 name="category"
                 checked={values.category === category.id}
                 onChange={() => handleCategorySelect(category.id)}
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300"
+                className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600 bg-gray-100 border-gray-300"
               />
-              <label htmlFor={`category-${category.id}`} className="ml-2 text-sm font-medium text-gray-900">
+              <label htmlFor={`category-${category.id}`} className="ml-2 text-xs sm:text-sm font-medium text-gray-900">
                 {category.label}
               </label>
             </div>
-            <p className="mt-2 text-xs text-gray-500 pl-6">{category.description}</p>
+            <p className="mt-1 sm:mt-2 text-xs text-gray-500 pl-5 sm:pl-6">{category.description}</p>
           </div>
         ))}
       </div>
 
       {values.category === 'other' && (
-        <div className="mt-4">
-          <label className="block mb-2 text-sm font-medium text-gray-900">
+        <div className="mt-3 sm:mt-4">
+          <label className="block mb-1 sm:mb-2 text-xs sm:text-sm font-medium text-gray-900">
             Diğer kategori açıklaması
           </label>
           <input
             type="text"
             name="categoryOther" 
             onChange={(e) => onChange({ category: e.target.value })}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-xs sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 sm:p-2.5"
             placeholder="Kategori bilgisi giriniz"
           />
         </div>

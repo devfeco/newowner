@@ -51,7 +51,48 @@ export const FormContainer = ({
   
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      {/* Sol Panel - Gradient veya Video */}
+      {/* Sol Panel - Logo ve slogan veya Video (Mobil ekranlarda) */}
+      <div className={`flex md:hidden ${showVideo ? 'flex-col p-0' : 'p-6'} bg-gradient-to-r from-[#1e70f9] to-[#29ADB2] text-white`}>
+        {showVideo ? (
+          <div className="flex flex-col items-center justify-center w-full p-4">
+            <Image 
+              src="/images/newowner-logo-white.png"
+              alt="NewOwner Logo"
+              width={150}
+              height={48}
+              priority
+              className="mb-2"
+            />
+            <p className="text-xs opacity-80 mb-3">E-Ticaret'e başlamanın hızlı yolu</p>
+            
+            <div className="w-full shadow-md rounded-lg overflow-hidden border-2 border-white/20">
+              <div className="relative pb-[56.25%] h-0">
+                <iframe 
+                  className="absolute top-0 left-0 w-full h-full"
+                  src={`https://www.youtube.com/embed/${videoId}?autoplay=0&controls=1&rel=0`}
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center w-full">
+            <Image 
+              src="/images/newowner-logo-white.png"
+              alt="NewOwner Logo"
+              width={180}
+              height={60}
+              priority
+              className="mb-2"
+            />
+            <p className="text-sm opacity-80">E-Ticaret'e başlamanın hızlı yolu</p>
+          </div>
+        )}
+      </div>
+      
+      {/* Sol Panel - Gradient veya Video (Sadece tablet ve masaüstü) */}
       <div 
         className="hidden md:flex w-full md:w-1/2 flex-col justify-center items-center relative overflow-hidden"
         style={{ 
@@ -103,19 +144,19 @@ export const FormContainer = ({
       
       {/* Sağ Panel - Form */}
       <div 
-        className="w-full md:w-1/2 p-6 flex items-center justify-center"
+        className={`w-full md:w-1/2 p-4 sm:p-6 flex items-center justify-center flex-grow ${showVideo ? 'pt-6' : ''}`}
         style={{ backgroundColor: theme.colors.background.main }}
       >
         <div className="w-full max-w-md">
           
-          <div className="rounded-2xl border border-gray-100 p-6 shadow-sm mb-8">
+          <div className="rounded-2xl border border-gray-100 p-4 sm:p-6 shadow-sm mb-6 sm:mb-8">
             <div className="mb-6 text-center">
               <Image 
                 src="/images/newowner-logo.png"
                 alt="NewOwner Logo"
-                width={140}
-                height={40}
-                className="mx-auto mb-6"
+                width={120}
+                height={32}
+                className="mx-auto mb-6 md:w-[140px] md:h-auto"
                 priority
               />
               <h1 
@@ -165,7 +206,7 @@ export const FormContainer = ({
           </div>
           
           {alternateActionText && alternateActionLink && (
-            <div className="mt-5 text-center">
+            <div className="mt-4 sm:mt-5 text-center">
               <p 
                 className="text-sm"
                 style={{ color: theme.colors.text.secondary }}

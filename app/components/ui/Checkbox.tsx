@@ -29,7 +29,7 @@ export const Checkbox = ({
       </div>
       <div className="ml-2 text-sm">
         <label 
-          className="font-normal select-none cursor-pointer"
+          className="font-normal select-none cursor-pointer text-xs sm:text-sm"
           style={{ color: theme.colors.text.primary }}
         >
           {label}

@@ -284,7 +284,7 @@ export default function CreateListingForm() {
   // Adım başlıklarını göster
   const renderStepIndicators = () => {
     return (
-      <div className="flex mb-8 justify-between">
+      <div className="hidden md:flex mb-8 justify-between">
         {activeSteps.map((step, index) => (
           <div 
             key={step.id} 
@@ -310,6 +310,28 @@ export default function CreateListingForm() {
             <span className="text-xs font-medium">{step.title}</span>
           </div>
         ))}
+      </div>
+    )
+  }
+  
+  // Mobil için adım göstergesi
+  const renderMobileStepIndicator = () => {
+    return (
+      <div className="md:hidden mb-6">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-sm text-gray-600 font-medium">
+            Adım {currentStep + 1}/{activeSteps.length}
+          </h3>
+          <span className="text-sm text-blue-600 font-medium">
+            {activeSteps[currentStep]?.title}
+          </span>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-1.5">
+          <div 
+            className="bg-blue-600 h-1.5 rounded-full" 
+            style={{ width: `${((currentStep + 1) / activeSteps.length) * 100}%` }}
+          ></div>
+        </div>
       </div>
     )
   }
@@ -441,18 +463,19 @@ export default function CreateListingForm() {
   return (
     <div className="w-full">
       {renderStepIndicators()}
+      {renderMobileStepIndicator()}
       
-      <div className="bg-white rounded-lg p-6 mb-6">
-        <h2 className="text-xl font-medium mb-6">{activeSteps[currentStep].title}</h2>
+      <div className="bg-white rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
+        <h2 className="text-lg sm:text-xl font-medium mb-4 sm:mb-6">{activeSteps[currentStep].title}</h2>
         {renderStep()}
       </div>
       
-      <div className="flex justify-end space-x-5">
+      <div className="flex justify-between sm:justify-end space-x-3 sm:space-x-5">
         <button 
           type="button"
           onClick={goToPreviousStep}
           disabled={currentStep === 0}
-          className="min-w-[80px] h-[45px] px-6 py-3 text-sm font-medium rounded-md border border-[#9CD1F2] text-[#9CD1F2] bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex-1 sm:flex-initial min-w-[80px] h-[40px] sm:h-[45px] px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium rounded-md border border-[#9CD1F2] text-[#9CD1F2] bg-white disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Geri
         </button>
@@ -461,7 +484,7 @@ export default function CreateListingForm() {
           <button
             type="button"
             onClick={goToNextStep}
-            className="min-w-[80px] h-[45px] px-6 py-3 text-sm font-medium rounded-md bg-[#0066FF] hover:bg-blue-600 text-white flex items-center justify-center transition-colors"
+            className="flex-1 sm:flex-initial min-w-[80px] h-[40px] sm:h-[45px] px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium rounded-md bg-[#0066FF] hover:bg-blue-600 text-white flex items-center justify-center transition-colors"
           >
             Devam
           </button>
@@ -470,11 +493,11 @@ export default function CreateListingForm() {
             type="button"
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="min-w-[80px] h-[45px] px-6 py-3 text-sm font-medium rounded-md bg-[#0066FF] hover:bg-blue-600 text-white flex items-center justify-center transition-colors"
+            className="flex-1 sm:flex-initial min-w-[80px] h-[40px] sm:h-[45px] px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium rounded-md bg-[#0066FF] hover:bg-blue-600 text-white flex items-center justify-center transition-colors"
           >
             {isSubmitting ? (
               <>
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg className="animate-spin -ml-1 mr-2 h-3 w-3 sm:h-4 sm:w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
