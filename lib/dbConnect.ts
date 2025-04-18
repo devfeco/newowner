@@ -1,47 +1,61 @@
 import mongoose from 'mongoose'
 
-declare global {
-  var mongoose: {
-    conn: typeof mongoose | null;
-    promise: Promise<typeof mongoose> | null;
-  } | undefined
+// mongoose bağlantısı için tip tanımı
+type MongooseConnection = {
+  conn: typeof mongoose | null
+  promise: Promise<typeof mongoose> | null
 }
 
+// global namespace'i genişlet
+declare global {
+  // eslint-disable-next-line no-var
+  var mongooseConnection: MongooseConnection | undefined
+}
+
+// MongoDB URI doğrulama
 const MONGODB_URI = process.env.MONGODB_URI!
 
 if (!MONGODB_URI) {
   throw new Error('MONGODB_URI env değişkeni tanımlanmamış')
 }
 
-let cached = global.mongoose
+// Global bağlantı önbelleği
+const globalMongoose = global.mongooseConnection
 
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null }
+// Önbelleği başlat
+let cached: MongooseConnection = globalMongoose || {
+  conn: null,
+  promise: null,
+}
+
+// Global değişkene ata
+if (!global.mongooseConnection) {
+  global.mongooseConnection = cached
 }
 
 async function dbConnect() {
-  if (cached?.conn) {
+  if (cached.conn) {
     return cached.conn
   }
 
-  if (!cached?.promise) {
+  if (!cached.promise) {
     const opts = {
       bufferCommands: false,
     }
 
-    cached!.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
       return mongoose
     })
   }
 
   try {
-    cached!.conn = await cached!.promise
+    cached.conn = await cached.promise
   } catch (e) {
-    cached!.promise = null
+    cached.promise = null
     throw e
   }
 
-  return cached!.conn
+  return cached.conn
 }
 
 export default dbConnect 
