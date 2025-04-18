@@ -6,6 +6,10 @@ if (!MONGODB_URI) {
   throw new Error('MONGODB_URI env değişkeni tanımlanmamış')
 }
 
+declare global {
+  var mongoose: { conn: any; promise: any } | undefined
+}
+
 let cached = global.mongoose
 
 if (!cached) {
