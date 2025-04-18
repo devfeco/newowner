@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import dbConnect from '@/app/lib/mongodb'
+import { dbConnect } from '@/app/lib/mongodb'
 import Listing from '@/app/models/Listing'
 import jwt from 'jsonwebtoken'
 
