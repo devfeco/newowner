@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/app/contexts/AuthContext'
@@ -8,10 +8,12 @@ import { Button } from '@/app/components/ui/Button'
 import { Input } from '@/app/components/ui/Input'
 import { FormContainer } from '@/app/components/ui/FormContainer'
 import { TermsModal } from '@/app/components/TermsModal'
+import { signIn } from 'next-auth/react'
+import { GoogleIcon, LinkedinIcon } from '@/app/components/icons'
 
 export default function LoginPage() {
   const router = useRouter()
-  const { login, state } = useAuth()
+  const { login, state, loginWithGoogle } = useAuth()
   const [showModal, setShowModal] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
@@ -23,6 +25,7 @@ export default function LoginPage() {
     general: ''
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -94,6 +97,70 @@ export default function LoginPage() {
       setIsLoading(false)
     }
   }
+  
+  const handleGoogleLogin = async () => {
+    try {
+      setIsGoogleLoading(true)
+      setFormErrors({ ...formErrors, general: '' })
+      
+      console.log('Google login başlatılıyor - doğrudan yönlendirme')
+      
+      // Doğrudan callback URL'e yönlendir
+      await signIn('google', { 
+        callbackUrl: '/auth/google-handler',
+        redirect: true
+      })
+      
+    } catch (error: any) {
+      console.error('Google login hatası:', error)
+      setFormErrors({
+        ...formErrors,
+        general: error.message || 'Google ile giriş yapılamadı. Lütfen tekrar deneyin.'
+      })
+      setIsGoogleLoading(false)
+    }
+  }
+
+  const handleLinkedinLogin = async () => {
+    try {
+      setIsLoading(true)
+      setFormErrors({ ...formErrors, general: '' })
+      
+      console.log('LinkedIn login başlatılıyor - doğrudan yönlendirme')
+      
+      // LinkedIn ile giriş için NextAuth'u kullan
+      await signIn('linkedin', { 
+        callbackUrl: '/auth/linkedin-handler',
+        redirect: true
+      })
+      
+    } catch (error: any) {
+      console.error('LinkedIn login hatası:', error)
+      setFormErrors({
+        ...formErrors,
+        general: error.message || 'LinkedIn ile giriş yapılamadı. Lütfen tekrar deneyin.'
+      })
+      setIsLoading(false)
+    }
+  }
+
+  interface SocialIconButtonProps {
+    icon: ReactNode
+    label: string
+    onClick: () => void
+  }
+
+  const SocialIconButton = ({ icon, label, onClick }: SocialIconButtonProps) => {
+    return (
+      <button 
+        onClick={onClick}
+        className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+        aria-label={label}
+      >
+        {icon}
+      </button>
+    )
+  }
 
   return (
     <FormContainer
@@ -157,6 +224,28 @@ export default function LoginPage() {
           >
             {isLoading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
           </Button>
+          
+          <div className="relative mt-2 sm:mt-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="bg-white px-2 text-gray-500">veya</span>
+            </div>
+          </div>
+          
+          <div className="flex justify-center space-x-4 mt-4">
+                  <SocialIconButton 
+                    icon={<GoogleIcon />} 
+                    label="Google ile giriş yap" 
+                    onClick={handleGoogleLogin}
+                  />
+                  <SocialIconButton 
+                    icon={<LinkedinIcon />} 
+                    label="LinkedIn ile giriş yap" 
+                    onClick={handleLinkedinLogin}
+                  />
+                </div>
         </form>
       </div>
 

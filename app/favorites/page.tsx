@@ -47,7 +47,20 @@ export default function FavoritesPage() {
     
     setLoading(true)
     try {
-      const response = await fetch(`/api/users/${state.user._id}/favorites`)
+      let response;
+      
+      // Google ile giriş yapanlar için state.user._id olmayabilir
+      // O nedenle email üzerinden istek atacağız
+      if (!state.user._id && state.user.email) {
+        // Email bilgisi ile kullanıcının favorilerini getir
+        console.log('Email ile favoriler getiriliyor:', state.user.email)
+        response = await fetch(`/api/user/favorites?email=${encodeURIComponent(state.user.email)}`)
+      } else {
+        // Normal kullanıcı ID'si ile favorileri getir
+        console.log('User ID ile favoriler getiriliyor:', state.user._id)
+        response = await fetch(`/api/users/${state.user._id}/favorites`)
+      }
+      
       const data = await response.json()
       if (data.success) {
         setFavoriteListings(data.favorites)

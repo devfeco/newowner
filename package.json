@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth/mongodb-adapter": "^3.8.0",
+    "@heroicons/react": "^2.2.0",
+    "@react-oauth/google": "^0.12.1",
     "@tailwindcss/typography": "^0.5.16",
     "axios": "^1.8.4",
     "bcryptjs": "^3.0.2",

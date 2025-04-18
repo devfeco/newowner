@@ -1,8 +1,10 @@
 'use client'
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { AuthState, AuthAction, IUser } from '../lib/types'
 import { verifyToken, validateAndLoadUser } from '../lib/jwt'
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 // AuthContext için başlangıç değeri
 const initialState: AuthState = {
@@ -20,13 +22,15 @@ const AuthContext = createContext<{
   register: (name: string, email: string, password: string) => Promise<any>
   logout: () => void
   updateUserType: (userType: 'buyer' | 'seller') => Promise<any>
+  loginWithGoogle: () => Promise<void>
 }>({
   state: initialState,
   dispatch: () => null,
   login: async () => {},
   register: async () => {},
   logout: () => {},
-  updateUserType: async () => {}
+  updateUserType: async () => {},
+  loginWithGoogle: async () => {}
 })
 
 // Reducer function
@@ -79,9 +83,74 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
 // AuthProvider component
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState)
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  
+  // Next-Auth session'dan kullanıcı verilerini kontrol et ve JWT token al
+  useEffect(() => {
+    const getGoogleToken = async (email: string) => {
+      try {
+        const response = await fetch(`/api/auth/session-token?email=${encodeURIComponent(email)}`, {
+          method: 'GET',
+        })
+        
+        const data = await response.json()
+        
+        if (!data.success) {
+          console.error('Google token alma hatası:', data.message)
+          return null
+        }
+        
+        // Token'ı localStorage'a kaydet
+        if (data.token) {
+          localStorage.setItem('token', data.token)
+          // Cookie'ye de ekle (middleware için)
+          document.cookie = `token=${data.token}; path=/; max-age=${30 * 24 * 60 * 60}; SameSite=Lax`;
+          console.log('Google kullanıcısı için token kaydedildi')
+          
+          // Kullanıcı verisini mevcut session verisiyle birleştir
+          const userData: IUser = {
+            ...data.user,
+            email: session?.user?.email || data.user.email,
+            name: session?.user?.name || data.user.name,
+            image: session?.user?.image || data.user.image,
+            _id: data.user._id, // MongoDB ObjectId'yi user._id olarak kullan
+          }
+          
+          // Kullanıcı verilerini state'e ekle
+          dispatch({
+            type: 'LOGIN_SUCCESS',
+            payload: { user: userData, token: data.token }
+          })
+          
+          // Kullanıcının tipine göre yönlendirme yap
+          if (data.user.userType) {
+            console.log('Kullanıcı tipi mevcut, ana sayfaya yönlendiriliyor...')
+            router.push('/')
+          } else {
+            console.log('Kullanıcı tipi belirlenmemiş, onboarding sayfasına yönlendiriliyor...')
+            router.push('/onboarding')
+          }
+        }
+        
+        return data
+      } catch (error) {
+        console.error('Google token alma hatası:', error)
+        return null
+      }
+    }
+    
+    if (status === 'authenticated' && session?.user?.email) {
+      // Google ile giriş başarılı, JWT token almak için API'ye istek at
+      getGoogleToken(session.user.email)
+    }
+  }, [session, status, router])
   
   // Local storage'dan kullanıcı bilgilerini yükleme
   useEffect(() => {
+    // Eğer OAuth giriş yapıldıysa, token kontrolünü atla
+    if (state.isAuthenticated) return
+    
     const loadUser = async () => {
       dispatch({ type: 'LOGIN_START' }) // Loading durumunu aktif et
       
@@ -100,11 +169,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (!userData) {
           console.log('Token geçersiz, kullanıcı çıkış yapıldı')
           localStorage.removeItem('token')
+          // Cookie'den de sil
+          document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
           dispatch({ type: 'LOGOUT' })
           return
         }
         
         console.log('Kullanıcı verileri yüklendi:', userData)
+        // Cookie'ye de ekle (middleware için)
+        document.cookie = `token=${token}; path=/; max-age=${30 * 24 * 60 * 60}; SameSite=Lax`;
         dispatch({ 
           type: 'LOGIN_SUCCESS', 
           payload: { user: userData, token }
@@ -133,13 +206,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     window.addEventListener('storage', handleStorageChange)
     return () => window.removeEventListener('storage', handleStorageChange)
-  }, []) // Component mount olduğunda bir kez çalışır
+  }, [state.isAuthenticated]) // Component mount olduğunda bir kez çalışır
   
   // Login fonksiyonu
   const login = async (email: string, password: string) => {
-    dispatch({ type: 'LOGIN_START' })
-    
     try {
+      dispatch({ type: 'LOGIN_START' })
+      
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -148,20 +221,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       const data = await response.json()
       
-      // Debug için yanıtı konsola yazdır
-      console.log('Login API yanıtı:', data)
-      
       if (!data.success) {
-        throw new Error(data.message || 'Giriş başarısız')
+        console.error('Giriş başarısız:', data.message)
+        throw new Error(data.message || 'Giriş yapılamadı')
       }
       
       // Token'ı localStorage'a kaydet
       if (data.token) {
         localStorage.setItem('token', data.token)
-        console.log('Token localStorage\'a kaydedildi:', data.token.substring(0, 15) + '...')
-      } else {
-        console.error('Token alınamadı!')
-        throw new Error('Token alınamadı!')
+        // Cookie'ye de ekle (middleware için)
+        document.cookie = `token=${data.token}; path=/; max-age=${30 * 24 * 60 * 60}; SameSite=Lax`;
       }
       
       // Kullanıcı verilerini state'e ekle
@@ -181,11 +250,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }
   
+  // Google ile giriş
+  const loginWithGoogle = async () => {
+    try {
+      // Google oturumunu başlat, sonucu döndür
+      return await signIn('google', { 
+        redirect: false
+      })
+    } catch (error: any) {
+      console.error('Google giriş hatası:', error)
+      dispatch({
+        type: 'LOGIN_FAILURE',
+        payload: error.message || 'Google ile giriş başarısız'
+      })
+      throw error
+    }
+  }
+  
   // Register fonksiyonu
   const register = async (name: string, email: string, password: string) => {
-    dispatch({ type: 'REGISTER_START' })
-    
     try {
+      dispatch({ type: 'REGISTER_START' })
+      
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -193,19 +279,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       })
       
       const data = await response.json()
-      console.log('Register API yanıtı:', data)
       
       if (!data.success) {
-        throw new Error(data.message || 'Kayıt başarısız')
+        console.error('Kayıt başarısız:', data.message)
+        throw new Error(data.message || 'Kayıt yapılamadı')
       }
+      
+      console.log('Kayıt başarılı:', data)
       
       // Token'ı localStorage'a kaydet
       if (data.token) {
         localStorage.setItem('token', data.token)
-        console.log('Token localStorage\'a kaydedildi:', data.token.substring(0, 15) + '...')
-      } else {
-        console.error('Token alınamadı!')
-        throw new Error('Token alınamadı!')
+        // Cookie'ye de ekle (middleware için)
+        document.cookie = `token=${data.token}; path=/; max-age=${30 * 24 * 60 * 60}; SameSite=Lax`;
       }
       
       dispatch({
@@ -226,13 +312,46 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   
   // Logout fonksiyonu
   const logout = () => {
-    localStorage.removeItem('token')
-    dispatch({ type: 'LOGOUT' })
+    // NextAuth session'ı sonlandır
+    signOut({ redirect: false }).then(() => {
+      // Local storage'dan token'ı sil
+      localStorage.removeItem('token')
+      // Cookie'den token'ı sil
+      document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      // State'i temizle
+      dispatch({ type: 'LOGOUT' })
+      // Login sayfasına yönlendir
+      router.push('/auth/login')
+    })
   }
   
   // Kullanıcı tipini güncelleme fonksiyonu
   const updateUserType = async (userType: 'buyer' | 'seller') => {
     try {
+      // NextAuth kullanıcısı ise
+      if (session?.user) {
+        const response = await fetch('/api/user/nextauth-type', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ 
+            email: session.user.email, 
+            userType 
+          })
+        })
+        
+        const data = await response.json()
+        
+        if (!data.success) {
+          throw new Error(data.message || 'Kullanıcı tipi güncellenemedi')
+        }
+        
+        dispatch({ type: 'SET_USER_TYPE', payload: userType })
+        return data
+      }
+      
+      // Normal kullanıcı ise
       const token = localStorage.getItem('token')
       
       if (!token) {
@@ -254,29 +373,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw new Error(data.message || 'Kullanıcı tipi güncellenemedi')
       }
       
-      // Kullanıcı verilerini state'e güncelle
-      if (state.user) {
-        dispatch({
-          type: 'SET_USER_TYPE',
-          payload: userType
-        })
-        
-        // Token'ı yenilememiz gerekirse burada token'ı güncelleyebiliriz
-        if (data.token) {
-          localStorage.setItem('token', data.token)
-          console.log('Yeni token kaydedildi')
-        }
-      }
-      
+      dispatch({ type: 'SET_USER_TYPE', payload: userType })
       return data
-    } catch (error) {
+    } catch (error: any) {
       console.error('Kullanıcı tipi güncelleme hatası:', error)
       throw error
     }
   }
   
   return (
-    <AuthContext.Provider value={{ state, dispatch, login, register, logout, updateUserType }}>
+    <AuthContext.Provider
+      value={{
+        state,
+        dispatch,
+        login,
+        register,
+        logout,
+        updateUserType,
+        loginWithGoogle
+      }}
+    >
       {children}
     </AuthContext.Provider>
   )

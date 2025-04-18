@@ -94,6 +94,12 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="hidden md:flex space-x-6 text-gray-700 text-sm">
+                <button 
+                  onClick={() => router.push('/about')}
+                  className="hover:text-blue-600 transition-colors"
+                >
+                  Hakkımızda
+                </button>
                 {state.user?.userType === 'admin' && (
                   <>
                     <button 
@@ -185,6 +191,17 @@ export default function HomePage() {
               </div>
               
               <div className="mt-3 space-y-2">
+                <button
+                  onClick={() => {
+                    setShowMobileMenu(false)
+                    router.push('/about')
+                  }}
+                  className="flex w-full items-center gap-2 py-2 px-2 rounded-md hover:bg-gray-100 text-gray-700"
+                >
+                  <FiUser size={16} />
+                  <span className="text-sm">Hakkımızda</span>
+                </button>
+                
                 <button
                   onClick={navigateToFavorites}
                   className="flex w-full items-center gap-2 py-2 px-2 rounded-md hover:bg-gray-100 text-gray-700"

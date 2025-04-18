@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server'
-import dbConnect from '@/lib/dbConnect'
+import { NextRequest, NextResponse } from 'next/server'
+import { dbConnect } from '@/app/lib/mongodb'
 import User from '@/app/models/User'
 import Listing from '@/app/models/Listing'
 import { extractUserFromToken } from '@/app/lib/jwt'
@@ -27,59 +27,83 @@ const getTokenFromRequest = (request: Request) => {
 }
 
 // Favorileri getir
-export async function GET(request: Request) {
+export async function GET(req: NextRequest) {
   try {
+    // URL'den email parametresini al
+    const url = new URL(req.url)
+    const email = url.searchParams.get('email')
+    
+    if (!email) {
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Email parametresi eksik' 
+      }, { status: 400 })
+    }
+    
     await dbConnect()
-    
-    // Token'ı al
-    const token = getTokenFromRequest(request)
-    console.log('GET - Alınan token:', token ? token.substring(0, 15) + '...' : 'Token bulunamadı')
-    
-    if (!token) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Oturum açmanız gerekiyor' 
-      }, { status: 401 })
+    const db = mongoose.connection.db
+    if (!db) {
+      return NextResponse.json({ error: 'Veritabanı bağlantısı başarısız' }, { status: 500 })
     }
     
-    // Token'dan kullanıcı bilgisini çıkar
-    const userData = extractUserFromToken(token)
-    console.log('GET - Kullanıcı bilgisi:', userData)
+    console.log(`Email ile kullanıcı aranıyor: ${email}`)
     
-    if (!userData) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Geçersiz oturum' 
-      }, { status: 401 })
-    }
-    
-    // User veritabanından favorileri al
-    const user: any = await User.findById(userData._id).lean()
-    console.log('GET - MongoDB kullanıcı ID araması:', userData._id)
+    // Email ile kullanıcıyı bul
+    const user = await db.collection('users').findOne({ email })
     
     if (!user) {
+      console.log(`Kullanıcı bulunamadı: ${email}`)
       return NextResponse.json({ 
         success: false, 
-        error: 'Kullanıcı bulunamadı' 
+        message: 'Kullanıcı bulunamadı' 
       }, { status: 404 })
     }
     
-    // Favorileri string'e çevir
+    console.log(`Kullanıcı bulundu: ${user._id}`)
+    
+    // Favorileri al (yoksa boş array)
     const favorites = user.favorites || []
-    console.log('GET - Ham favoriler:', favorites)
     
-    const favoriteIds = Array.isArray(favorites) ? favorites.map((id: any) => id.toString()) : []
-    console.log('GET - String favoriler:', favoriteIds)
+    if (!favorites.length) {
+      console.log('Kullanıcının favorileri yok')
+      return NextResponse.json({
+        success: true,
+        favorites: []
+      })
+    }
     
-    return NextResponse.json({ 
+    console.log(`Kullanıcının ${favorites.length} adet favorisi var`)
+    
+    // Favori ilan ID'lerini ObjectId'ye dönüştür
+    const favoriteObjectIds = favorites.map((id: string) => {
+      try {
+        return new mongoose.Types.ObjectId(id)
+      } catch (err) {
+        console.error('Geçersiz ID formatı:', id)
+        return null
+      }
+    }).filter(Boolean)
+    
+    // Favorileri getir
+    const favoriteListings = await db.collection('listings')
+      .find({ 
+        _id: { $in: favoriteObjectIds },
+        isApproved: true 
+      })
+      .toArray()
+    
+    console.log(`${favoriteListings.length} adet favori ilan bulundu ve döndürülüyor`)
+    
+    return NextResponse.json({
       success: true,
-      favorites: favoriteIds
+      favorites: favoriteListings
     })
+    
   } catch (error) {
-    console.error('Favorileri getirme hatası:', error)
+    console.error('Email ile favori ilanları getirme hatası:', error)
     return NextResponse.json({ 
       success: false, 
-      error: 'Sunucu hatası' 
+      message: 'Favori ilanları getirirken bir hata oluştu'
     }, { status: 500 })
   }
 }

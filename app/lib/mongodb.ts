@@ -1,59 +1,63 @@
-import mongoose from 'mongoose'
+import { MongoClient } from 'mongodb';
+import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/newowner"
-
-if (!MONGODB_URI) {
-  throw new Error('MONGODB_URI ortam değişkeni tanımlanmamış.')
+if (!process.env.MONGODB_URI) {
+  throw new Error('MONGODB_URI environment variable is not defined');
 }
 
-// Global mongoose tipi için arayüz tanımlama
-interface MongooseCache {
-  conn: typeof mongoose | null;
-  promise: Promise<typeof mongoose> | null;
-}
+const uri = process.env.MONGODB_URI as string;
+let client: MongoClient;
+let clientPromise: Promise<MongoClient>;
 
-// Global değişken tipi tanımı
-declare global {
-  var mongoose: MongooseCache | undefined;
-}
-
-// Önbelleğe alınmış bağlantı değişkenini başlat
-const cached: MongooseCache = global.mongoose || { conn: null, promise: null }
-
-// Global değişkeni güncelle
-if (!global.mongoose) {
-  global.mongoose = cached
-}
-
-async function dbConnect() {
-  if (cached.conn) {
-    return cached.conn
+if (process.env.NODE_ENV === 'development') {
+  // Development modunda global değişken kullanarak bağlantıyı yeniden kullan
+  let globalWithMongo = global as typeof globalThis & {
+    _mongoClientPromise?: Promise<MongoClient>;
+  };
+  
+  if (!globalWithMongo._mongoClientPromise) {
+    client = new MongoClient(uri);
+    globalWithMongo._mongoClientPromise = client.connect();
   }
+  
+  clientPromise = globalWithMongo._mongoClientPromise;
+} else {
+  // Production modunda yeni bir bağlantı oluştur
+  client = new MongoClient(uri);
+  clientPromise = client.connect();
+}
 
-  if (!cached.promise) {
-    const opts = {
-      bufferCommands: false,
-    }
+// Tüm uygulama için promise'i dışa aktar
+export default clientPromise;
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts)
-      .then(mongoose => {
-        console.log('MongoDB bağlantısı başarılı')
-        return mongoose
-      })
-      .catch(error => {
-        console.error('MongoDB bağlantı hatası:', error)
-        throw error
-      })
-  }
-
+// Mongoose için dbConnect fonksiyonu (geri uyumluluk için)
+const dbConnect = async () => {
   try {
-    cached.conn = await cached.promise
-  } catch (e) {
-    cached.promise = null
-    throw e
+    const MONGODB_URI = process.env.MONGODB_URI || '';
+    const options = {
+      bufferCommands: false,
+    };
+    
+    await mongoose.connect(MONGODB_URI, options);
+    console.log('MongoDB bağlantısı başarılı (mongoose)');
+    return mongoose;
+  } catch (error) {
+    console.error('MongoDB bağlantı hatası:', error);
+    throw error;
   }
+};
 
-  return cached.conn
-}
+// Eski dbConnect fonksiyonunu varsayılan olarak dışa aktar
+export { dbConnect };
 
-export default dbConnect 
+// Eski fonksiyonu uyumluluk için koruyalım
+export async function connectToDatabase() {
+  try {
+    const client = await clientPromise;
+    const db = client.db();
+    return { client, db };
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    throw error;
+  }
+} 

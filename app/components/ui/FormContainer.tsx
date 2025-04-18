@@ -4,8 +4,8 @@ import { theme } from '@/app/theme'
 import { ReactNode } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { GoogleIcon, LinkedinIcon } from '@/app/components/icons'
-
+import logo from "@/public/images/newowner-logo.png"
+import logowhite from "@/public/images/newowner-logo-white.png"
 interface FormContainerProps {
   children: ReactNode
   title: string
@@ -56,7 +56,7 @@ export const FormContainer = ({
         {showVideo ? (
           <div className="flex flex-col items-center justify-center w-full p-4">
             <Image 
-              src="/images/newowner-logo-white.png"
+              src={logowhite}
               alt="NewOwner Logo"
               width={150}
               height={48}
@@ -80,7 +80,7 @@ export const FormContainer = ({
         ) : (
           <div className="flex flex-col items-center justify-center w-full">
             <Image 
-              src="/images/newowner-logo-white.png"
+              src={logowhite}
               alt="NewOwner Logo"
               width={180}
               height={60}
@@ -107,7 +107,7 @@ export const FormContainer = ({
         {showVideo ? (
           <div className="w-full h-full flex flex-col items-center justify-center z-10 px-8">
           <Image 
-              src="/images/newowner-logo-white.png"
+              src={logowhite}
               alt="NewOwner Logo"
               width={300}
               height={95}
@@ -130,7 +130,7 @@ export const FormContainer = ({
         ) : (
           <div className="flex flex-col items-center justify-center">
             <Image 
-              src="/images/newowner-logo-white.png"
+              src={logowhite}
               alt="NewOwner Logo"
               width={300}
               height={95}
@@ -152,7 +152,7 @@ export const FormContainer = ({
           <div className="rounded-2xl border border-gray-100 p-4 sm:p-6 shadow-sm mb-6 sm:mb-8">
             <div className="mb-6 text-center">
               <Image 
-                src="/images/newowner-logo.png"
+                src={logo}
                 alt="NewOwner Logo"
                 width={120}
                 height={32}
@@ -176,33 +176,6 @@ export const FormContainer = ({
             </div>
             
             {children}
-            
-            {/* Sosyal medya butonları */}
-            {showSocialLogin && (
-              <div className="mt-5">
-                <div className="relative mb-4">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-200"></div>
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-white text-gray-500">veya</span>
-                  </div>
-                </div>
-                
-                <div className="flex justify-center space-x-4 mt-4">
-                  <SocialIconButton 
-                    icon={<GoogleIcon />} 
-                    label="Google ile giriş yap" 
-                    onClick={() => console.log('Google login')}
-                  />
-                  <SocialIconButton 
-                    icon={<LinkedinIcon />} 
-                    label="LinkedIn ile giriş yap" 
-                    onClick={() => console.log('LinkedIn login')}
-                  />
-                </div>
-              </div>
-            )}
           </div>
           
           {alternateActionText && alternateActionLink && (

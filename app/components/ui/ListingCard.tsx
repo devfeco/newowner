@@ -1,8 +1,8 @@
 'use client'
 
-import { FiEye, FiHeart, FiMessageSquare } from 'react-icons/fi'
+import { FiEye, FiHeart, FiCalendar, FiFolder, FiDollarSign, FiTrendingUp, FiUsers, FiTag } from 'react-icons/fi'
 import { useAuth } from '@/app/contexts/AuthContext'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, ReactNode } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 
@@ -25,21 +25,35 @@ const CATEGORY_MAP: { [key: string]: string } = {
 }
 
 interface InfoBadgeProps {
-	icon: string
+	icon: ReactNode
 	label: string
 	value: string
+	tooltip?: string
 }
 
-function InfoBadge({ icon, label, value }: InfoBadgeProps) {
+function InfoBadge({ icon, label, value, tooltip }: InfoBadgeProps) {
+	const [showTooltip, setShowTooltip] = useState(false)
+	
 	return (
-		<div className="flex items-center gap-1.5 sm:gap-2">
-			<div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-[#6941C6] flex items-center justify-center text-white text-xs sm:text-sm rounded-full">
+		<div 
+			className="flex items-center gap-1.5 sm:gap-2 relative"
+			onMouseEnter={() => setShowTooltip(true)}
+			onMouseLeave={() => setShowTooltip(false)}
+		>
+			<div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-[#6941C6] flex items-center justify-center text-white text-xs sm:text-sm">
 				{icon}
 			</div>
 			<div>
 				<p className="text-[11px] sm:text-[13px] text-gray-500">{label}</p>
 				<p className="text-[12px] sm:text-[13.5px] font-medium text-gray-900">{value}</p>
 			</div>
+			
+			{tooltip && showTooltip && (
+				<div className="absolute bottom-full left-0 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded shadow-lg whitespace-nowrap z-10">
+					{tooltip}
+					<div className="absolute bottom-0 left-3 transform translate-y-1/2 rotate-45 w-2 h-2 bg-gray-800"></div>
+				</div>
+			)}
 		</div>
 	)
 }
@@ -214,12 +228,42 @@ export function ListingCard({
 
 			{/* Bilgi Badge'leri */}
 			<div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-3 sm:gap-6 mb-4 sm:mb-8">
-				<InfoBadge icon="K" label="Kuruluş" value={foundingDate} />
-				<InfoBadge icon="K" label="Kategori" value={CATEGORY_MAP[category] || category} />
-				<InfoBadge icon="Y" label="Yıllık Ciro" value={`${yearlySales} ₺`} />
-				<InfoBadge icon="Y" label="Yıllık Kar" value={`${yearlyProfit} ₺`} />
-				<InfoBadge icon="M" label="Müşteri Sayısı" value={salesCount} />
-				<InfoBadge icon="F" label="Fiyat" value={`${price} ₺`} />
+				<InfoBadge 
+					icon={<FiCalendar size={16} />} 
+					label="Kuruluş" 
+					value={foundingDate} 
+					tooltip="İşletmenin kuruluş tarihi"
+				/>
+				<InfoBadge 
+					icon={<FiFolder size={16} />} 
+					label="Kategori" 
+					value={CATEGORY_MAP[category] || category} 
+					tooltip="İşletmenin faaliyet gösterdiği alan"
+				/>
+				<InfoBadge 
+					icon={<FiDollarSign size={16} />} 
+					label="Yıllık Ciro" 
+					value={`${yearlySales} ₺`} 
+					tooltip="Son mali yıldaki toplam ciro"
+				/>
+				<InfoBadge 
+					icon={<FiTrendingUp size={16} />} 
+					label="Yıllık Kar" 
+					value={`${yearlyProfit} ₺`} 
+					tooltip="Son mali yıldaki net kâr"
+				/>
+				<InfoBadge 
+					icon={<FiUsers size={16} />} 
+					label="Müşteri Sayısı" 
+					value={salesCount} 
+					tooltip="Toplam aktif müşteri sayısı"
+				/>
+				<InfoBadge 
+					icon={<FiTag size={16} />} 
+					label="Fiyat" 
+					value={`${price} ₺`} 
+					tooltip="Satış için istenen bedel"
+				/>
 			</div>
 
 			{/* Başlık ve Doğrulama Badge */}
@@ -241,14 +285,14 @@ export function ListingCard({
 			{/* Alt Butonlar */}
 			<div className="flex flex-wrap items-center gap-3 sm:gap-8 pt-3 sm:pt-4 border-t border-gray-100">
 				<button 
-					className="flex items-center gap-1.5 sm:gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+					className="flex items-center gap-1.5 sm:gap-2 text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
 					onClick={() => router.push(`/listings/${_id}`)}
 				>
 					<FiEye className="w-[16px] h-[16px] sm:w-[18px] sm:h-[18px]" />
 					<span className="text-[12px] sm:text-[13.5px]">Detaylar</span>
 				</button>
 				<button 
-					className="flex items-center gap-1.5 sm:gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+					className="flex items-center gap-1.5 sm:gap-2 text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
 					onClick={handleToggleFavorite}
 					disabled={loading}
 				>

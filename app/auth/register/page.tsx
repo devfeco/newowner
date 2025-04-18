@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/app/contexts/AuthContext'
@@ -9,10 +9,14 @@ import { Input } from '@/app/components/ui/Input'
 import { FormContainer } from '@/app/components/ui/FormContainer'
 import { Checkbox } from '@/app/components/ui/Checkbox'
 import { TermsModal } from '@/app/components/TermsModal'
+import { signIn } from 'next-auth/react'
+import { GoogleIcon, LinkedinIcon } from '@/app/components/icons'
+import logo from "@/public/images/newowner-logo.png"
+
 
 export default function RegisterPage() {
   const router = useRouter()
-  const { register, state } = useAuth()
+  const { register, state, loginWithGoogle } = useAuth()
   const [showModal, setShowModal] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -30,6 +34,7 @@ export default function RegisterPage() {
   })
   const [acceptTerms, setAcceptTerms] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -114,7 +119,71 @@ export default function RegisterPage() {
       setIsLoading(false)
     }
   }
+  
+  const handleGoogleRegister = async () => {
+    try {
+      setIsGoogleLoading(true)
+      setFormErrors({ ...formErrors, general: '' })
+      
+      console.log('Google kayıt başlatılıyor - doğrudan yönlendirme')
+      
+      // Doğrudan callback URL'e yönlendir
+      await signIn('google', { 
+        callbackUrl: '/auth/google-handler',
+        redirect: true
+      })
+      
+    } catch (error: any) {
+      console.error('Google kayıt hatası:', error)
+      setFormErrors({
+        ...formErrors,
+        general: error.message || 'Google ile kayıt yapılamadı. Lütfen tekrar deneyin.'
+      })
+      setIsGoogleLoading(false)
+    }
+  }
 
+  const handleLinkedinRegister = async () => {
+    try {
+      setIsLoading(true)
+      setFormErrors({ ...formErrors, general: '' })
+      
+      console.log('LinkedIn kayıt başlatılıyor - doğrudan yönlendirme')
+      
+      // LinkedIn ile kayıt için NextAuth'u kullan
+      await signIn('linkedin', { 
+        callbackUrl: '/auth/linkedin-handler',
+        redirect: true
+      })
+      
+    } catch (error: any) {
+      console.error('LinkedIn kayıt hatası:', error)
+      setFormErrors({
+        ...formErrors,
+        general: error.message || 'LinkedIn ile kayıt yapılamadı. Lütfen tekrar deneyin.'
+      })
+      setIsLoading(false)
+    }
+  }
+
+  interface SocialIconButtonProps {
+    icon: ReactNode
+    label: string
+    onClick: () => void
+  }
+
+  const SocialIconButton = ({ icon, label, onClick }: SocialIconButtonProps) => {
+    return (
+      <button 
+        onClick={onClick}
+        className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+        aria-label={label}
+      >
+        {icon}
+      </button>
+    )
+  }
+  
   return (
     <FormContainer
       title="KAYIT OL"
@@ -200,6 +269,28 @@ export default function RegisterPage() {
           >
             {isLoading ? 'Kaydınız Yapılıyor...' : 'Kayıt Ol'}
           </Button>
+          
+          <div className="relative mt-2 sm:mt-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="bg-white px-2 text-gray-500">veya</span>
+            </div>
+          </div>
+          
+          <div className="flex justify-center space-x-4 mt-4">
+                  <SocialIconButton 
+                    icon={<GoogleIcon />} 
+                    label="Google ile kayıt ol" 
+                    onClick={handleGoogleRegister}
+                  />
+                  <SocialIconButton 
+                    icon={<LinkedinIcon />} 
+                    label="LinkedIn ile kayıt ol" 
+                    onClick={handleLinkedinRegister}
+                  />
+                </div>
         </form>
       </div>
 
