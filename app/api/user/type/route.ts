@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import dbConnect from '@/app/lib/mongodb'
+import {dbConnect} from '@/app/lib/mongodb'
 import User from '@/app/models/User'
 const jwt = require('jsonwebtoken')
 import { generateToken } from '@/app/lib/jwt'
