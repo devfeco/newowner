@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import dbConnect from '@/app/lib/mongodb'
+import { dbConnect } from '@/app/lib/mongodb'
 import Appointment from '@/app/models/Appointment'
 import { verifyToken } from '@/app/lib/jwt'
 
@@ -8,67 +8,58 @@ export async function POST(request: NextRequest) {
     await dbConnect()
     
     const body = await request.json()
-    const { listingId, fullName, email, phone, appointmentDate, notes } = body
     
-    // Token kontrolü (varsa)
-    let userId = null
+    // Token kontrolü
     const token = request.headers.get('Authorization')?.split(' ')[1]
     
-    if (token) {
-      try {
-        const decoded = await verifyToken(token)
-        userId = decoded?.id
-        
-        // Kullanıcının bu liste için zaten randevusu var mı kontrol et
-        const existingAppointment = await Appointment.findOne({
-          listingId,
-          userId: decoded?.id
-        })
-        
-        if (existingAppointment) {
-          return NextResponse.json({
-            success: false,
-            message: 'Bu ilan için zaten bir randevunuz bulunmaktadır. Varolan randevunuzu güncelleyebilirsiniz.'
-          }, { status: 400 })
-        }
-      } catch (error) {
-        console.error('Token doğrulama hatası:', error)
-      }
+    if (!token) {
+      return NextResponse.json({
+        success: false,
+        message: 'Yetkilendirme hatası'
+      }, { status: 401 })
     }
     
-    // Aynı e-posta ile bu liste için zaten randevu var mı kontrol et
-    // (Giriş yapmamış kullanıcılar için)
-    if (!userId) {
-      const existingAppointment = await Appointment.findOne({
-        listingId,
-        email
-      })
-      
-      if (existingAppointment) {
-        return NextResponse.json({
-          success: false,
-          message: 'Bu e-posta adresi ile bu ilan için zaten bir randevu bulunmaktadır.'
-        }, { status: 400 })
-      }
+    const decoded = await verifyToken(token)
+    
+    if (!decoded || !decoded.id) {
+      return NextResponse.json({
+        success: false,
+        message: 'Geçersiz token'
+      }, { status: 401 })
     }
     
-    // Randevu oluştur
-    const appointment = new Appointment({
+    // Zorunlu alanları kontrol et
+    const { listingId, fullName, email, phone, appointmentDate, notes } = body
+    
+    if (!listingId || !fullName || !email || !phone || !appointmentDate) {
+      return NextResponse.json({
+        success: false,
+        message: 'Tüm zorunlu alanları doldurun'
+      }, { status: 400 })
+    }
+    
+    // Yeni randevu oluştur
+    const newAppointment = new Appointment({
       listingId,
-      userId,
+      userId: decoded.id,
       fullName,
       email,
       phone,
-      appointmentDate: new Date(appointmentDate),
-      notes
+      appointmentDate,
+      notes: notes || '',
+      status: 'pending', // Varsayılan olarak beklemede
+      createdAt: new Date(),
+      updatedAt: new Date()
     })
     
-    await appointment.save()
+    // Veritabanına kaydet
+    await newAppointment.save()
     
     return NextResponse.json({
       success: true,
-      appointment
-    }, { status: 201 })
+      message: 'Randevu başarıyla oluşturuldu',
+      appointment: newAppointment
+    })
     
   } catch (error: any) {
     console.error('Randevu oluşturma hatası:', error)
