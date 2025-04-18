@@ -390,7 +390,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         register,
         logout,
         updateUserType,
-        loginWithGoogle
+        loginWithGoogle: loginWithGoogle as () => Promise<void>
       }}
     >
       {children}
