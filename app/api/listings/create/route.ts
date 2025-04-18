@@ -5,7 +5,6 @@ import jwt from 'jsonwebtoken'
 
 export async function POST(request: Request) {
   try {
-    // Veritabanı bağlantısı kur
     await dbConnect()
 
     // Token kontrolü - Header'dan alma
@@ -16,7 +15,6 @@ export async function POST(request: Request) {
       ? authHeader.substring(7) 
       : null
     
-    // İstek body'sinden token al (form gönderiminde token gönderilmiş olabilir)
     let requestData
     try {
       const requestClone = request.clone()
