@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession, signIn } from 'next-auth/react'
 
-export default function AuthHandlerPage() {
+function AuthHandlerContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [message, setMessage] = useState('')
@@ -66,15 +66,30 @@ export default function AuthHandlerPage() {
   }, [session, status, router, searchParams])
 
   return (
+    <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
+      {status === 'loading' && (
+        <div className="mb-4">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-black border-r-transparent align-[-0.125em]" />
+        </div>
+      )}
+      <p className="text-xl font-medium mb-4">{message}</p>
+    </div>
+  )
+}
+
+export default function AuthHandlerPage() {
+  return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
-        {status === 'loading' && (
+      <Suspense fallback={
+        <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
           <div className="mb-4">
             <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-black border-r-transparent align-[-0.125em]" />
           </div>
-        )}
-        <p className="text-xl font-medium mb-4">{message}</p>
-      </div>
+          <p className="text-xl font-medium mb-4">Yükleniyor...</p>
+        </div>
+      }>
+        <AuthHandlerContent />
+      </Suspense>
     </div>
   )
 } 
