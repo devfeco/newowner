@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import MarketplaceChart from '@/app/components/ui/MarketplaceChart';
 import SalesDistributionChart from '@/app/components/ui/SalesDistributionChart';
 import AppointmentModal from '@/app/components/appointment/AppointmentModal';
+import QuestionAnswerSection from '@/app/components/listings/QuestionAnswerSection'
 
 const CATEGORY_MAP = {
   'auto': 'Oto Aksesuar',
@@ -42,6 +43,19 @@ interface Listing {
   isApproved: boolean;
   brandName: string;
   userId: string;
+  listingTitle: string;
+  transferItems?: string[];
+  ecommerceInfrastructure?: string;
+  licenseRenewalDate?: string;
+  hasSearchEngineBan?: boolean;
+  searchEngineBanDetails?: string;
+  socialMediaAccounts?: Record<string, boolean | string>;
+  hasLegalObstacles?: boolean;
+  legalObstacleDetails?: string;
+  founderExperience?: string;
+  willProvideSupport?: boolean;
+  supportDuration?: string;
+  supportDetails?: string;
   
   // Pazaryeri verileri
   hasMarketplaces?: boolean;
@@ -123,11 +137,16 @@ interface InfoCardProps {
 
 function InfoCard({ title, value, prefix = '', suffix = '' }: InfoCardProps) {
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-      <h3 className="text-sm text-gray-700 font-medium mb-1">{title}</h3>
-      <p className="text-lg font-semibold text-gray-900">
+    <div className="group relative overflow-hidden bg-gradient-to-br from-white to-gray-50 rounded-xl hover:shadow-md transition-all duration-300 border border-gray-100 transform hover:scale-[1.01] hover:border-blue-200">
+      <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-blue-400 to-blue-600 opacity-60 group-hover:opacity-100 transition-opacity"></div>
+      <div className="p-3 sm:p-4">
+        <p className="text-xs sm:text-sm font-medium text-gray-500 mb-1 group-hover:text-blue-600 transition-colors">{title}</p>
+        <div className="flex items-end">
+          <p className="text-base sm:text-lg font-semibold text-gray-800 group-hover:text-gray-900 transition-colors">
         {prefix}{typeof value === 'number' ? value.toLocaleString('tr-TR') : value}{suffix}
       </p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -367,7 +386,7 @@ export default function ListingDetailPage() {
         {/* İlan Başlık */}
         <div className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-8 mb-4 sm:mb-8 shadow-sm border border-gray-100">
           <div className="flex flex-wrap items-center justify-between mb-3 sm:mb-6 gap-2">
-            <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{listing.brandName}</h1>
+            <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{listing.listingTitle}</h1>
             <div className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium flex items-center gap-1 ${
               listing.isApproved 
                 ? 'bg-green-50 text-green-700' 
@@ -424,27 +443,233 @@ export default function ListingDetailPage() {
         </div>
         
         {/* İlan Bilgileri */}
-        <div className={`mb-4 sm:mb-8 ${!isLoggedIn ? 'relative' : ''}`}>
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-4">İlan Detayları</h2>
-          <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-4 ${!isLoggedIn ? 'blur-[15px] select-none' : ''}`}>
-            <InfoCard title="Marka Adı" value={listing.brandName} />
+        <div className={`mb-6 sm:mb-10 ${!isLoggedIn ? 'relative' : ''}`}>
+          <div className="flex items-center gap-2 mb-3 sm:mb-5">
+            <div className="h-8 w-1 bg-blue-600 rounded"></div>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">İlan Detayları</h2>
+          </div>
+          
+          <div className={`${!isLoggedIn ? 'blur-[15px] select-none' : ''}`}>
+            <div className="bg-white rounded-xl overflow-hidden shadow-sm p-0.5 mb-5">
+              <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-y sm:divide-y-0 divide-gray-100">
+                <div className="p-4 bg-gradient-to-r from-blue-50 to-white">
+                  <p className="text-xs font-medium text-gray-500 mb-1">Satış Fiyatı</p>
+                  <p className="text-xl font-bold text-blue-700">{listing.price.toLocaleString('tr-TR')} ₺</p>
+                </div>
+                <div className="p-4">
+                  <p className="text-xs font-medium text-gray-500 mb-1">Yıllık Ciro</p>
+                  <p className="text-xl font-bold text-gray-800">{listing.yearlySales.toLocaleString('tr-TR')} ₺</p>
+                </div>
+                <div className="p-4">
+                  <p className="text-xs font-medium text-gray-500 mb-1">Yıllık Kar</p>
+                  <p className="text-xl font-bold text-gray-800">{listing.yearlyProfit.toLocaleString('tr-TR')} ₺</p>
+                </div>
+                <div className="p-4">
+                  <p className="text-xs font-medium text-gray-500 mb-1">Müşteri Sayısı</p>
+                  <p className="text-xl font-bold text-gray-800">{listing.salesCount.toLocaleString('tr-TR')}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
+            <InfoCard title="İlan Başlığı" value={listing.listingTitle} />
             <InfoCard title="Kuruluş Tarihi" value={listing.foundingDate} />
             <InfoCard title="Kategori" value={CATEGORY_MAP[listing.category as keyof typeof CATEGORY_MAP] || listing.category} />
             <InfoCard title="Lokasyon" value={listing.location} />
-            <InfoCard title="Satış Fiyatı" value={listing.price} prefix="" suffix=" ₺" />
-            <InfoCard title="Yıllık Ciro" value={listing.yearlySales} prefix="" suffix=" ₺" />
-            <InfoCard title="Yıllık Kar" value={listing.yearlyProfit} prefix="" suffix=" ₺" />
-            <InfoCard title="Müşteri Sayısı" value={listing.salesCount} />
+            </div>
           </div>
           
           {!isLoggedIn && (
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center backdrop-blur-sm bg-white/30">
               <button 
                 onClick={() => router.push('/auth/register')}
-                className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-xs sm:text-sm"
+                className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-xs sm:text-sm shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
               >
                 Detayları Görmek İçin Kaydol
               </button>
+            </div>
+          )}
+        </div>
+        
+        {/* Ek Bilgiler */}
+        <div className="mb-6 sm:mb-10">
+          <div className="flex items-center gap-2 mb-3 sm:mb-5">
+            <div className="h-8 w-1 bg-blue-600 rounded"></div>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Ek Bilgiler</h2>
+          </div>
+          
+            {/* Devir Edilecekler */}
+            {Array.isArray(listing.transferItems) && listing.transferItems.length > 0 && (
+            <div className="bg-white rounded-xl overflow-hidden shadow-sm mb-4 p-4 sm:p-5 border-l-4 border-blue-500">
+              <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2">Devir Edilecekler</h3>
+              <div className="flex flex-wrap gap-2">
+                {listing.transferItems.map(item => {
+                    const map: Record<string, string> = {
+                      brand: 'Marka',
+                      company: 'Şirket',
+                      website: 'Site',
+                      social: 'Sosyal Medya Hesapları',
+                      operation: 'Operasyon',
+                      assets: 'Demirbaşlar ve Tedarikçi Bağlantıları'
+                  };
+                  const label = map[item] || item;
+                  return (
+                    <span key={item} className="inline-block px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">
+                      {label}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="bg-white rounded-xl overflow-hidden shadow-sm">
+              <div className="border-b border-gray-100 px-4 py-3 bg-gradient-to-r from-gray-50 to-white">
+                <h3 className="text-sm font-semibold text-gray-900">Temel Bilgiler</h3>
+              </div>
+              <div className="px-4 py-3 divide-y divide-gray-100">
+                {/* Web Sitesi */}
+            {listing.websiteUrl && (
+                  <div className="py-2 flex justify-between items-center">
+                    <p className="text-sm text-gray-600">Web Sitesi</p>
+                    <p className="text-sm font-medium text-gray-900">{listing.websiteUrl.length > 10 ? `${listing.websiteUrl.slice(0, 5)}***${listing.websiteUrl.slice(-5)}` : '***'}</p>
+                  </div>
+            )}
+            {/* E-Ticaret Altyapısı */}
+            {listing.ecommerceInfrastructure && (
+                  <div className="py-2 flex justify-between items-center">
+                    <p className="text-sm text-gray-600">E-Ticaret Altyapısı</p>
+                    <p className="text-sm font-medium text-gray-900">{listing.ecommerceInfrastructure}</p>
+                  </div>
+            )}
+            {/* Lisans Yenileme Tarihi */}
+            {listing.licenseRenewalDate && (
+                  <div className="py-2 flex justify-between items-center">
+                    <p className="text-sm text-gray-600">Lisans Yenileme Tarihi</p>
+                    <p className="text-sm font-medium text-gray-900">{listing.licenseRenewalDate}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl overflow-hidden shadow-sm">
+              <div className="border-b border-gray-100 px-4 py-3 bg-gradient-to-r from-gray-50 to-white">
+                <h3 className="text-sm font-semibold text-gray-900">Durum Bilgileri</h3>
+              </div>
+              <div className="px-4 py-3 divide-y divide-gray-100">
+            {/* Arama Motoru Engeli */}
+            {typeof listing.hasSearchEngineBan !== 'undefined' && (
+                  <div className="py-2 flex justify-between items-center">
+                    <p className="text-sm text-gray-600">Arama Motoru Engeli</p>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${listing.hasSearchEngineBan ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
+                      {listing.hasSearchEngineBan ? 'Evet' : 'Hayır'}
+                    </span>
+                  </div>
+            )}
+            {/* Arama Motoru Engel Detayı */}
+            {listing.hasSearchEngineBan && listing.searchEngineBanDetails && (
+                  <div className="py-2">
+                    <p className="text-sm text-gray-600 mb-1">Engel Detayı</p>
+                    <p className="text-sm text-gray-900">{listing.searchEngineBanDetails}</p>
+                  </div>
+            )}
+            {/* Hukuki Engel */}
+            {typeof listing.hasLegalObstacles !== 'undefined' && (
+                  <div className="py-2 flex justify-between items-center">
+                    <p className="text-sm text-gray-600">Hukuki Engel</p>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${listing.hasLegalObstacles ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
+                      {listing.hasLegalObstacles ? 'Evet' : 'Hayır'}
+                    </span>
+                  </div>
+            )}
+            {/* Hukuki Engel Detayı */}
+            {listing.hasLegalObstacles && listing.legalObstacleDetails && (
+                  <div className="py-2">
+                    <p className="text-sm text-gray-600 mb-1">Engel Detayı</p>
+                    <p className="text-sm text-gray-900">{listing.legalObstacleDetails}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          
+          {/* Destek ve Deneyim Bilgileri */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+            {/* Kurucu Deneyimi */}
+            {listing.founderExperience && (
+              <div className="bg-white rounded-xl p-4 shadow-sm border-l-4 border-indigo-500">
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">Kurucu Deneyimi</h3>
+                <p className="text-sm text-gray-700">{listing.founderExperience}</p>
+              </div>
+            )}
+            
+            {/* Satış Sonrası Destek */}
+            {typeof listing.willProvideSupport !== 'undefined' && (
+              <div className="bg-white rounded-xl p-4 shadow-sm border-l-4 border-teal-500">
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">Satış Sonrası Destek</h3>
+                <div className="flex items-center mb-2">
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium mr-2 ${listing.willProvideSupport ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                    {listing.willProvideSupport ? 'Evet' : 'Hayır'}
+                  </span>
+                  
+            {listing.willProvideSupport && listing.supportDuration && (
+                    <span className="text-xs text-gray-700">
+                      Süre: {(() => {
+                  const durations = [
+                    { value: '1-week', label: '1 Hafta' },
+                    { value: '2-week', label: '2 Hafta' },
+                    { value: '1-month', label: '1 Ay' },
+                    { value: '3-month', label: '3 Ay' },
+                    { value: '6-month', label: '6 Ay' },
+                    { value: 'custom', label: 'Diğer' }
+                  ];
+                  const found = durations.find(d => d.value === listing.supportDuration);
+                  return found ? found.label : listing.supportDuration;
+                })()} 
+                    </span>
+            )}
+                </div>
+                
+            {listing.willProvideSupport && listing.supportDetails && (
+                  <p className="text-sm text-gray-700">{listing.supportDetails}</p>
+                )}
+              </div>
+            )}
+          </div>
+          
+          {/* Sosyal Medya Hesapları */}
+          {listing.socialMediaAccounts && Object.values(listing.socialMediaAccounts).some(v => v === true || (typeof v === 'string' && v !== '')) && (
+            <div className="mt-4 bg-white rounded-xl overflow-hidden shadow-sm">
+              <div className="border-b border-gray-100 px-4 py-3 bg-gradient-to-r from-gray-50 to-white">
+                <h3 className="text-sm font-semibold text-gray-900">Sosyal Medya Hesapları</h3>
+              </div>
+              <div className="p-4">
+              <div className="flex flex-wrap gap-3">
+                {[
+                    { key: 'instagram', label: 'Instagram', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/instagram.svg', color: '#E1306C' },
+                    { key: 'tiktok', label: 'TikTok', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/tiktok.svg', color: '#000000' },
+                    { key: 'facebook', label: 'Facebook', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg', color: '#1877F2' },
+                    { key: 'twitter', label: 'Twitter', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/twitter.svg', color: '#1DA1F2' },
+                    { key: 'youtube', label: 'YouTube', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/youtube.svg', color: '#FF0000' },
+                    { key: 'linkedin', label: 'LinkedIn', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg', color: '#0A66C2' }
+                  ].map(({ key, label, iconUrl, color }) => (
+                  listing.socialMediaAccounts?.[key] ? (
+                      <div key={key} className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2 min-w-[120px] shadow-sm hover:shadow-md transition-shadow">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: `${color}15` }}>
+                          <img src={iconUrl} alt={label + ' logo'} className="w-4 h-4" style={{ filter: `invert(0.5) sepia(1) saturate(5) hue-rotate(${color === '#000000' ? '0deg' : 'inherit'})` }} />
+                        </div>
+                        <div>
+                      <span className="font-medium text-gray-900 text-sm">{label}</span>
+                      {listing.socialMediaAccounts?.[`${key}Followers`] && (
+                            <p className="text-xs text-gray-600">{listing.socialMediaAccounts?.[`${key}Followers`]} takipçi</p>
+                      )}
+                        </div>
+                    </div>
+                  ) : null
+                ))}
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -556,16 +781,22 @@ export default function ListingDetailPage() {
             <span>{isLoggedIn ? 'Randevu Oluştur' : 'İletişime Geçmek İçin Kaydol'}</span>
           </button>
         </div>
-      </div>
-      
-      {/* Randevu Modal */}
-      {listing && (
-        <AppointmentModal 
-          isOpen={appointmentModalOpen} 
-          onClose={() => setAppointmentModalOpen(false)} 
-          listingId={listing._id} 
+        
+        {/* Soru ve Cevap Bölümü */}
+        <QuestionAnswerSection 
+          listingId={id} 
+          isListingOwner={isOwnListing || false}
         />
-      )}
+        
+        {/* Randevu Modal */}
+        {listing && (
+          <AppointmentModal 
+            isOpen={appointmentModalOpen} 
+            onClose={() => setAppointmentModalOpen(false)} 
+            listingId={listing._id} 
+          />
+        )}
+      </div>
     </div>
   );
 } 

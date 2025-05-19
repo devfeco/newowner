@@ -123,6 +123,7 @@ export type FormValues = {
   supportDuration: string
   supportDetails: string
   listingDescription: string
+  listingTitle: string
 }
 
 const initialValues: FormValues = {
@@ -228,6 +229,7 @@ const initialValues: FormValues = {
   supportDuration: '',
   supportDetails: '',
   listingDescription: '',
+  listingTitle: '',
 }
 
 const steps = [

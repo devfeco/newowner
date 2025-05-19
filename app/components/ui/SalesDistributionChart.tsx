@@ -112,7 +112,7 @@ export default function SalesDistributionChart({ salesData }: SalesDistributionC
         backgroundColor: colors,
         borderColor: 'transparent',
         borderWidth: 0,
-        hoverOffset: 15,
+        hoverOffset: 5,
         borderRadius: 3
       }
     ]
@@ -121,6 +121,10 @@ export default function SalesDistributionChart({ salesData }: SalesDistributionC
   // Grafik ayarları
   const options: ChartOptions<'doughnut'> = {
     responsive: true,
+    maintainAspectRatio: false,
+    layout: {
+      padding: 20
+    },
     plugins: {
       legend: {
         display: false
@@ -167,8 +171,10 @@ export default function SalesDistributionChart({ salesData }: SalesDistributionC
       
       <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
         <div className="md:col-span-3 relative">
-          <div className="h-64 flex items-center justify-center">
-            <Doughnut data={data} options={options} />
+          <div className="h-64 flex items-center justify-center overflow-visible">
+            <div className="w-4/5 h-4/5">
+              <Doughnut data={data} options={options} />
+            </div>
           </div>
         </div>
         

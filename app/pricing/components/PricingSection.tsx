@@ -15,19 +15,15 @@ const buttonStyles = {
 export default function PricingSection() {
   const [isAnnual, setIsAnnual] = useState(true)
   
-  // İndirim bilgisi
-  const promoEndsDate = '30 Eylül 2023'
-  const discountPercentage = 50
-  
   // Fiyat hesaplaması
   const premiumMonthlyPrice = 39
   const premiumAnnualPrice = 360
   
-  const monthlyWithDiscount = premiumMonthlyPrice * (1 - discountPercentage / 100)
-  const annualWithDiscount = premiumAnnualPrice * (1 - discountPercentage / 100)
+  // Aylık ortalama hesaplaması (yıllık toplam / 12)
+  const annualMonthlyEquivalent = (premiumAnnualPrice / 12).toFixed(2)
   
-  const displayedMonthlyPrice = isAnnual ? (annualWithDiscount / 12).toFixed(2) : monthlyWithDiscount.toFixed(2)
-  const displayedAnnualPrice = annualWithDiscount.toFixed(2)
+  // Tasarruf yüzdesi hesaplaması
+  const savingsPercentage = Math.round(100 - ((premiumAnnualPrice / (premiumMonthlyPrice * 12)) * 100))
   
   return (
     <div>
@@ -61,7 +57,7 @@ export default function PricingSection() {
             >
               Yıllık Ödeme
               <span className="ml-2 bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-bold">
-                %20 TASARRUF
+                %{savingsPercentage} TASARRUF
               </span>
             </button>
           </div>
@@ -111,31 +107,21 @@ export default function PricingSection() {
               </svg>
             </div>
             
-            <div className="absolute top-10 right-10">
-              <div className="bg-yellow-400 text-indigo-900 text-xs font-bold px-3 py-1 rounded-full uppercase">
-                %{discountPercentage} İndirim
-              </div>
-            </div>
-            
             <h3 className="text-2xl font-bold text-white mb-2">Premium</h3>
             <p className="text-indigo-100 mb-6">Profesyonel alıcı ve satıcılar için</p>
             
             <div className="flex items-baseline mb-2">
-              <span className="text-5xl font-extrabold text-white">${displayedMonthlyPrice}</span>
+              <span className="text-5xl font-extrabold text-white">{isAnnual ? `$${annualMonthlyEquivalent}` : `$${premiumMonthlyPrice}`}</span>
               <span className="text-indigo-200 ml-2 text-lg">/ ay</span>
             </div>
             
             {isAnnual && (
               <p className="text-indigo-200 mb-8">
-                Yıllık ${displayedAnnualPrice} ödeme (${(premiumAnnualPrice / 12).toFixed(2)}/ay yerine)
+                Yıllık ${premiumAnnualPrice} ödeme (${premiumMonthlyPrice}/ay yerine)
               </p>
             )}
             
-            <p className="text-yellow-300 text-sm font-medium mb-8">
-              *İndirimli fiyat {promoEndsDate} tarihine kadar geçerlidir
-            </p>
-            
-            <Link href="/auth/register?plan=premium">
+            <Link href={isAnnual ? "/payments/checkout?plan=annual" : "/payments/checkout?plan=monthly"}>
               <button className={buttonStyles.premium}>
                 Premium'a Yükselt
               </button>

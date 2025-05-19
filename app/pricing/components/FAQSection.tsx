@@ -21,8 +21,8 @@ export default function FAQSection() {
       answer: 'Premium üyeliğinizi hesap ayarları bölümünden istediğiniz zaman iptal edebilirsiniz. İptal etmeniz durumunda, mevcut ödeme döneminin sonuna kadar premium özelliklerden yararlanmaya devam edeceksiniz. Otomatik yenileme devre dışı bırakılacak ve sonraki ödeme alınmayacaktır.'
     },
     {
-      question: 'Komisyon ücretleri nasıl hesaplanır?',
-      answer: 'Başarılı olarak satışı gerçekleştirilen tüm marka ve operasyonlardan hem alıcı hem de satıcıdan %5 komisyon alınmaktadır. Bu komisyon, işlemin toplam değeri üzerinden hesaplanır ve işlem tamamlandığında tahsil edilir. Komisyon, platformun işlem güvenliği, aracılık hizmetleri ve destek maliyetlerini karşılamak için kullanılmaktadır.'
+      question: 'Listeleme hizmet bedeli nasıl hesaplanır?',
+      answer: 'Başarılı olarak satışı gerçekleştirilen tüm marka ve operasyonlardan hem alıcı hem de satıcıdan %5 listeleme hizmet bedeli alınmaktadır. Bu bedel, işlemin toplam değeri üzerinden hesaplanır ve işlem tamamlandığında tahsil edilir. Listeleme hizmet bedeli, platformun işlem güvenliği, aracılık hizmetleri ve destek maliyetlerini karşılamak için kullanılmaktadır.'
     },
     {
       question: 'Premium üyelik olmadan ilanları görebilir miyim?',

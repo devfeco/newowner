@@ -63,9 +63,9 @@ export async function POST(request: Request) {
       )
     }
 
-    if (!formData.brandName || !formData.category || !formData.price) {
+    if (!formData.brandName || !formData.category || !formData.price || !formData.listingTitle) {
       return NextResponse.json(
-        { success: false, message: 'Gerekli alanları doldurun: marka adı, kategori ve fiyat' },
+        { success: false, message: 'Gerekli alanları doldurun: marka adı, kategori, fiyat ve ilan başlığı' },
         { status: 400 }
       )
     }
@@ -85,7 +85,8 @@ export async function POST(request: Request) {
       message: 'İlan başarıyla oluşturuldu',
       data: {
         id: newListing._id,
-        title: newListing.brandName,
+        title: newListing.listingTitle,
+        brandName: newListing.brandName,
         createdAt: newListing.createdAt
       }
     })

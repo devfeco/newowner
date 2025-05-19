@@ -76,7 +76,7 @@ function StatusBadge({ status }: StatusBadgeProps) {
 
 interface ListingCardProps {
 	_id: string
-	brandName: string
+	listingTitle: string
 	location: string
 	foundingDate: string
 	category: string
@@ -91,7 +91,7 @@ interface ListingCardProps {
 
 export function ListingCard({
 	_id,
-	brandName,
+	listingTitle,
 	location,
 	foundingDate,
 	category,
@@ -214,9 +214,8 @@ export function ListingCard({
 	return (
 		<div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-6 transition-all duration-200 hover:shadow-md">
 			{/* Başlık Kısmı */}
-			<div className="flex flex-wrap items-center gap-1 mb-4 sm:mb-8 text-[13px] sm:text-[15px]">
-				<span className="text-gray-500">Marka:</span>
-				<span className="font-medium text-gray-900">{brandName}</span>
+			<div className="flex flex-wrap items-center gap-1 mb-4 sm:mb-8">
+				<h2 className="text-xl sm:text-2xl font-bold text-gray-900 flex-1">{listingTitle}</h2>
 				<span className="text-gray-500 ml-2">Merkez:</span>
 				<span className="font-medium text-gray-900">{location}</span>
 				{isOwnListing && (
@@ -268,9 +267,6 @@ export function ListingCard({
 
 			{/* Başlık ve Doğrulama Badge */}
 			<div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
-				<h3 className="text-[13px] sm:text-[15px] font-medium text-gray-900">
-					{brandName}
-				</h3>
 				<StatusBadge status={status} />
 			</div>
 

@@ -8,7 +8,8 @@ const PUBLIC_ROUTES = [
   '/welcome',
   '/landing',
   '/pricing',
-  '/about'
+  '/about',
+  '/'
 ]
 
 const isListingDetailPage = (pathname: string) => {
@@ -18,7 +19,7 @@ const isListingDetailPage = (pathname: string) => {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   
-  // API rotaları için middleware çalıştırma
+  // API rotaları için middleware çalıştırma - tüm API rotaları public
   if (pathname.startsWith('/api')) {
     return NextResponse.next()
   }

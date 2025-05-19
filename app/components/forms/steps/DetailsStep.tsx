@@ -30,6 +30,25 @@ export default function DetailsStep({ values, onChange }: DetailsStepProps) {
 
   return (
     <div className="space-y-8">
+      {/* İlan Başlığı */}
+      <div>
+        <label className="block mb-2 text-sm font-medium text-gray-900">
+          İlan Başlığı <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          name="listingTitle"
+          value={values.listingTitle}
+          onChange={handleInputChange}
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          placeholder="İlanınız için dikkat çekici bir başlık girin..."
+          required
+        />
+        <p className="mt-1 text-xs text-gray-500">
+          İlanınızın öne çıkmasını sağlayacak kısa ve açıklayıcı bir başlık yazın
+        </p>
+      </div>
+
       {/* İlan Açıklaması */}
       <div>
         <label className="block mb-2 text-sm font-medium text-gray-900">

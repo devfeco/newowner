@@ -133,19 +133,19 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Commission Information */}
+      {/* Listeleme Hizmet Bedeli Bilgilendirme */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-5xl mx-auto bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl shadow-xl overflow-hidden">
           <div className="p-10 sm:p-12 text-center text-white relative">
             <div className="absolute inset-0 bg-pattern opacity-10"></div>
             <div className="relative z-10">
-              <h2 className="text-3xl sm:text-4xl font-bold mb-6">Komisyon Ücretleri</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold mb-6">Listeleme Hizmet Bedeli</h2>
               <p className="text-xl sm:text-2xl text-indigo-100 mb-6 max-w-3xl mx-auto">
-                Başarılı olarak satışı gerçekleştirilen tüm marka ve operasyonlardan hem alıcı hem de satıcıdan <span className="font-bold text-white">%5 komisyon</span> alınmaktadır.
+                Başarılı olarak satışı gerçekleştirilen tüm marka ve operasyonlardan hem alıcı hem de satıcıdan <span className="font-bold text-white">%5 listeleme hizmet bedeli</span> alınmaktadır.
               </p>
               <div className="inline-block bg-white/10 backdrop-blur-sm rounded-xl p-6 mt-4 border border-white/20">
                 <p className="text-lg text-white">
-                  Bu komisyon, güvenli işlem süreci, aracılık hizmetleri ve platform desteğini kapsamaktadır.
+                  Bu bedel, güvenli işlem süreci, aracılık hizmetleri ve platform desteğini kapsamaktadır.
                 </p>
               </div>
             </div>
@@ -181,7 +181,7 @@ export default function PricingPage() {
                     <span>Ücretsiz Başla</span>
                   </button>
                 </Link>
-                <Link href="/auth/register?plan=premium">
+                <Link href="#pricing">
                   <button className={`${buttonStyles.primary} px-8 py-3.5 text-base hover:bg-gray-100 text-indigo-700`}>
                     <span>Premium Üyelik Al</span>
                   </button>

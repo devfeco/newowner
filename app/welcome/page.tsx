@@ -58,8 +58,11 @@ export default function LandingPage() {
           
           {/* Ana Menü */}
           <nav className="hidden md:flex items-center space-x-8">
+            <Link href="/" className="text-gray-700 hover:text-indigo-600 font-medium transition duration-200">
+              Keşfet
+            </Link>
             <Link href="/pricing" className="text-gray-700 hover:text-indigo-600 font-medium transition duration-200">
-              Fiyatlar
+              Fiyatlandırma
             </Link>
             <Link href="/about" className="text-gray-700 hover:text-indigo-600 font-medium transition duration-200">
               Hakkımızda
@@ -67,6 +70,20 @@ export default function LandingPage() {
           </nav>
           
           <div className="flex items-center space-x-4">
+            <Link href="/valuation">
+              <div className="relative group">
+                <button className={`${buttonStyles.secondary} ${buttonStyles.icon} px-6 py-2.5 text-sm group-hover:bg-blue-50`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  </svg>
+                  <span>Akıllı Değerleme</span>
+                </button>
+                <span className="absolute -top-2 -right-2 bg-indigo-500 text-white text-xs px-2 py-0.5 rounded-full">Yakında</span>
+                <div className="absolute z-50 w-64 p-4 bg-white rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-1 mt-2 border border-gray-200">
+                  <p className="text-sm text-gray-600">Şirketinizin değerini gerçek piyasa verileriyle hızlıca hesaplayın.</p>
+                </div>
+              </div>
+            </Link>
             <Link href="/auth/register">
               <button className={`${buttonStyles.primary} ${buttonStyles.icon} px-6 py-2.5 text-sm`}>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -88,14 +105,14 @@ export default function LandingPage() {
                 <div className="absolute -left-10 -top-20 w-40 h-40 bg-indigo-100 rounded-full filter blur-3xl opacity-50"></div>
                 <div className="absolute -right-10 bottom-0 w-32 h-32 bg-purple-100 rounded-full filter blur-3xl opacity-50"></div>
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 text-gray-900 leading-tight">
-                  E-Ticaret Şirketinizi <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Alın</span> veya <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Satın</span>
+                  E-Ticaret işinizi <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">satın</span> veya yenisine <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">sahip olun</span>
                 </h1>
               </div>
               <p className="text-xl sm:text-2xl text-gray-600 max-w-3xl mb-10">
-                E-Ticarete başlamanın en jızlı yolu.
+                E-ticarette yeni başlangıçların platformu
               </p>
-              <div className="flex flex-col sm:flex-row justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-6 bg-red">
-                <Link href="/auth/register">
+              <div className="flex flex-col sm:flex-row justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-6">
+                <Link href="/">
                 <button className={`${buttonStyles.secondary} px-8 py-3.5 text-base`}>
                   <span>Şimdi Keşfet</span>
                 </button>
@@ -758,7 +775,7 @@ export default function LandingPage() {
                   <Link href="#" className="text-gray-400 hover:text-indigo-400 transition-colors duration-300">Anasayfa</Link>
                 </li>
                 <li>
-                  <Link href="#" className="text-gray-400 hover:text-indigo-400 transition-colors duration-300">Fiyatlar</Link>
+                  <Link href="#" className="text-gray-400 hover:text-indigo-400 transition-colors duration-300">Fiyatlandırma</Link>
                 </li>
                 <li>
                   <Link href="/about" className="text-gray-400 hover:text-indigo-400 transition-colors duration-300">Hakkımızda</Link>

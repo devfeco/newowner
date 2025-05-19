@@ -23,6 +23,8 @@ const AuthContext = createContext<{
   logout: () => void
   updateUserType: (userType: 'buyer' | 'seller') => Promise<any>
   loginWithGoogle: () => Promise<void>
+  sendPhoneOTP: (phoneNumber: string) => Promise<any>
+  verifyPhoneOTP: (phoneNumber: string, otp: string) => Promise<any>
 }>({
   state: initialState,
   dispatch: () => null,
@@ -30,7 +32,9 @@ const AuthContext = createContext<{
   register: async () => {},
   logout: () => {},
   updateUserType: async () => {},
-  loginWithGoogle: async () => {}
+  loginWithGoogle: async () => {},
+  sendPhoneOTP: async () => {},
+  verifyPhoneOTP: async () => {}
 })
 
 // Reducer function
@@ -73,6 +77,16 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
       return {
         ...state,
         user: state.user ? { ...state.user, userType: action.payload } : null
+      }
+    
+    case 'PHONE_VERIFIED':
+      return {
+        ...state,
+        user: state.user ? { 
+          ...state.user, 
+          phoneNumber: action.payload.phoneNumber,
+          isPhoneVerified: true 
+        } : null
       }
     
     default:
@@ -381,6 +395,74 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }
   
+  // Telefon numarasına OTP gönderme fonksiyonu
+  const sendPhoneOTP = async (phoneNumber: string) => {
+    try {
+      const token = localStorage.getItem('token')
+      
+      if (!token) {
+        throw new Error('Oturum bulunamadı')
+      }
+      
+      const response = await fetch('/api/auth/send-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ phoneNumber })
+      })
+      
+      const data = await response.json()
+      
+      if (!data.success) {
+        throw new Error(data.message || 'OTP gönderilemedi')
+      }
+      
+      return data
+    } catch (error: any) {
+      console.error('OTP gönderme hatası:', error)
+      throw error
+    }
+  }
+  
+  // Telefon numarasını OTP ile doğrulama fonksiyonu
+  const verifyPhoneOTP = async (phoneNumber: string, otp: string) => {
+    try {
+      const token = localStorage.getItem('token')
+      
+      if (!token) {
+        throw new Error('Oturum bulunamadı')
+      }
+      
+      const response = await fetch('/api/auth/verify-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ phoneNumber, otp })
+      })
+      
+      const data = await response.json()
+      
+      if (!data.success) {
+        throw new Error(data.message || 'OTP doğrulanamadı')
+      }
+      
+      // Kullanıcı state'ini güncelle
+      dispatch({ 
+        type: 'PHONE_VERIFIED', 
+        payload: { phoneNumber: data.phoneNumber }
+      })
+      
+      return data
+    } catch (error: any) {
+      console.error('OTP doğrulama hatası:', error)
+      throw error
+    }
+  }
+  
   return (
     <AuthContext.Provider
       value={{
@@ -390,7 +472,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         register,
         logout,
         updateUserType,
-        loginWithGoogle: loginWithGoogle as () => Promise<void>
+        loginWithGoogle: loginWithGoogle as () => Promise<void>,
+        sendPhoneOTP,
+        verifyPhoneOTP
       }}
     >
       {children}

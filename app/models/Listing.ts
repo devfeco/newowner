@@ -6,7 +6,7 @@ const listingSchema = new Schema({
   category: { type: String, required: true },
   foundingDate: { type: String, required: true },
   location: { type: String, required: true },
-  price: { type: String, required: true },
+  price: { type: Number, required: true },
   transferItems: { type: [String], default: [] },
   
   hasMarketplaces: { type: Boolean, default: false },
@@ -58,7 +58,7 @@ const listingSchema = new Schema({
   
   hasWebsite: { type: Boolean, default: false },
   websiteUrl: { type: String },
-  salesCount: { type: String },
+  salesCount: { type: Number, default: 0 },
   websiteSales: { type: String },
   websiteMonthlySales: {
     month1: String,
@@ -93,8 +93,8 @@ const listingSchema = new Schema({
   
   inventoryValue: { type: String, required: true },
   inventoryDetails: { type: String, required: true },
-  yearlyProfit: { type: String, required: true },
-  yearlySales: { type: String, required: true },
+  yearlyProfit: { type: Number, required: true },
+  yearlySales: { type: Number, required: true },
   monthlyExpenses: { type: String, required: true },
   hasLegalObstacles: { type: Boolean, default: false },
   legalObstacleDetails: { type: String },
@@ -104,6 +104,7 @@ const listingSchema = new Schema({
   supportDuration: { type: String },
   supportDetails: { type: String },
   listingDescription: { type: String, required: true },
+  listingTitle: { type: String, required: true },
   isApproved: { type: Boolean, default: false },
 }, {
   timestamps: true

@@ -15,10 +15,26 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  phoneNumber: {
+    type: String,
+    default: null
+  },
+  isPhoneVerified: {
+    type: Boolean,
+    default: false
+  },
   userType: {
     type: String,
     enum: ['buyer', 'seller', 'admin'],
     default: 'buyer'
+  },
+  isPremium: {
+    type: Boolean,
+    default: false
+  },
+  premiumUntil: {
+    type: Date,
+    default: null
   },
   favorites: [{
     type: Schema.Types.ObjectId,

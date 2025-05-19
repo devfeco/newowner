@@ -4,7 +4,11 @@ export interface IUser {
   name?: string;
   email: string;
   password?: string;
+  phoneNumber?: string;
+  isPhoneVerified?: boolean;
   userType?: 'buyer' | 'seller' | 'admin';
+  isPremium?: boolean;
+  premiumUntil?: string | Date;
   createdAt?: string | Date;
   updatedAt?: string | Date;
   __v?: number;
@@ -39,4 +43,5 @@ export type AuthAction =
   | { type: 'REGISTER_SUCCESS'; payload: { user: IUser; token: string } }
   | { type: 'REGISTER_FAILURE'; payload: string }
   | { type: 'LOGOUT' }
-  | { type: 'SET_USER_TYPE'; payload: 'buyer' | 'seller' }; 
+  | { type: 'SET_USER_TYPE'; payload: 'buyer' | 'seller' }
+  | { type: 'PHONE_VERIFIED'; payload: { phoneNumber: string } }; 

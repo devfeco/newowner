@@ -6,6 +6,9 @@ import clientPromise from '@/app/lib/mongodb';
 import { connectToDatabase } from '@/app/lib/mongodb';
 import { User, Account, Profile } from 'next-auth';
 import { AdapterUser } from "next-auth/adapters";
+import { NextRequest } from 'next/server';
+import { IUser } from './types';
+import jwt from 'jsonwebtoken';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -131,4 +134,36 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
   },
+};
+
+// Token'dan kullanıcı bilgilerini çıkar
+export const getUser = async (req: NextRequest): Promise<IUser | null> => {
+  try {
+    const token = req.headers.get('authorization')?.split(' ')[1];
+    
+    if (!token) {
+      return null;
+    }
+    
+    const JWT_SECRET = process.env.JWT_SECRET || 'newowner_jwt_secret_key';
+    const decodedToken: any = jwt.verify(token, JWT_SECRET);
+    
+    if (!decodedToken || !decodedToken.id || !decodedToken.email) {
+      return null;
+    }
+    
+    return {
+      _id: decodedToken.id,
+      email: decodedToken.email,
+      name: decodedToken.name || '',
+      fullName: decodedToken.name || '',
+      userType: decodedToken.userType as ('buyer' | 'seller' | 'admin' | undefined),
+      isPremium: decodedToken.isPremium || false,
+      premiumUntil: decodedToken.premiumUntil || null,
+      createdAt: decodedToken.createdAt
+    };
+  } catch (error) {
+    console.error('Token doğrulama hatası:', error);
+    return null;
+  }
 }; 
